@@ -1,0 +1,17 @@
+include: package:flutter_lints/flutter_lints.yaml
+
+analyzer:
+  errors:
+    prefer_const_constructors: false
+  additional_options:
+    strong-mode:
+      implicit_cast_literals: false
+      implicit_dynamic_calls: false
+      implicit_dynamic_refs: false
+
+# Custom lint rules for code quality
+linter:
+  rules:
+    prefer_const_constructors: false
+    prefer_const_declarations: false
+    prefer_const_fields: false

@@ -1,0 +1,46 @@
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Build
+build/
+**/build/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+Thumbs.db
+
+# Firebase (not used but good practice)
+firebase-debug.log*
+**/firebase-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Keys and signing
+*.jks
+*.keystore
+*.pem
+key.properties
+
+# Backups (never commit actual data)
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+backup_*.json
+backup_*.db
+
+# Logs
+*.log
