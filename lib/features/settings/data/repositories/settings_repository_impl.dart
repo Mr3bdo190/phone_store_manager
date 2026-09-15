@@ -24,7 +24,8 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
-  Future<({bool data, Failure? failure})> updateSettings(StoreSettings settings) async {
+  Future<({bool data, Failure? failure})> updateSettings(
+      StoreSettings settings) async {
     try {
       await localDataSource.saveSettings(settings);
       return (data: true, failure: null);

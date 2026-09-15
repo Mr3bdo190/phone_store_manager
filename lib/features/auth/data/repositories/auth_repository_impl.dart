@@ -25,12 +25,19 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       if (username.trim().isEmpty || password.isEmpty) {
-        return (data: null, failure: const ValidationFailure('الاسم المستخدم وكلمة المرور مطلوبة'));
+        return (
+          data: null,
+          failure: const ValidationFailure('الاسم المستخدم وكلمة المرور مطلوبة')
+        );
       }
 
-      final user = await localDataSource.login(username: username, password: password);
+      final user =
+          await localDataSource.login(username: username, password: password);
       if (user == null) {
-        return (data: null, failure: const AuthFailure('اسم المستخدم أو كلمة المرور غير صحيحة'));
+        return (
+          data: null,
+          failure: const AuthFailure('اسم المستخدم أو كلمة المرور غير صحيحة')
+        );
       }
 
       return (data: user, failure: null);
@@ -47,13 +54,21 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       if (username.trim().isEmpty) {
-        return (data: false, failure: const ValidationFailure('اسم المستخدم مطلوب'));
+        return (
+          data: false,
+          failure: const ValidationFailure('اسم المستخدم مطلوب')
+        );
       }
       if (password.length < 4) {
-        return (data: false, failure: const ValidationFailure('كلمة المرور يجب أن تكون 4 أحرف على الأقل'));
+        return (
+          data: false,
+          failure: const ValidationFailure(
+              'كلمة المرور يجب أن تكون 4 أحرف على الأقل')
+        );
       }
 
-      final parsedRole = UserRole.values.firstWhere((e) => e.name == role, orElse: () => UserRole.employee);
+      final parsedRole = UserRole.values
+          .firstWhere((e) => e.name == role, orElse: () => UserRole.employee);
       final salt = generateSalt();
       final hash = hashPassword(password, salt);
 
@@ -78,7 +93,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       if (newPassword.length < 4) {
-        return (data: false, failure: const ValidationFailure('كلمة المرور الجديدة يجب أن تكون 4 أحرف على الأقل'));
+        return (
+          data: false,
+          failure: const ValidationFailure(
+              'كلمة المرور الجديدة يجب أن تكون 4 أحرف على الأقل')
+        );
       }
       return (data: true, failure: null);
     } catch (e) {

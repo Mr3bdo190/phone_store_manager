@@ -18,12 +18,29 @@ part 'database.g.dart';
 /// Database for Phone Store Manager.
 @DriftDatabase(
   tables: [
-    Users, Settings, Categories, Brands, Products, Phones, Imeis,
-    Customers, Suppliers, Sales, SaleItems, SalePayments,
-    Purchases, PurchaseItems, PurchasePayments,
-    Returns, ReturnItems,
-    InventoryMovements, Expenses, CashTransactions,
-    Repairs, RepairPhotos, AuditLogs,
+    Users,
+    Settings,
+    Categories,
+    Brands,
+    Products,
+    Phones,
+    Imeis,
+    Customers,
+    Suppliers,
+    Sales,
+    SaleItems,
+    SalePayments,
+    Purchases,
+    PurchaseItems,
+    PurchasePayments,
+    Returns,
+    ReturnItems,
+    InventoryMovements,
+    Expenses,
+    CashTransactions,
+    Repairs,
+    RepairPhotos,
+    AuditLogs,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -47,7 +64,8 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<Setting> getSettingsOrDefault() async {
-    final result = await (select(settings)..where((t) => t.id.equals(1))).getSingleOrNull();
+    final result = await (select(settings)..where((t) => t.id.equals(1)))
+        .getSingleOrNull();
     if (result == null) {
       await into(settings).insert(SettingsCompanion(
         id: const Value(1),
@@ -62,7 +80,8 @@ class AppDatabase extends _$AppDatabase {
         enableAutoBackup: const Value(false),
         sessionTimeoutMinutes: const Value(15),
       ));
-      return (await (select(settings)..where((t) => t.id.equals(1))).getSingle());
+      return (await (select(settings)..where((t) => t.id.equals(1)))
+          .getSingle());
     }
     return result;
   }
@@ -87,7 +106,9 @@ class AppDatabase extends _$AppDatabase {
 
   Future<bool> updateUser(UsersCompanion user) async {
     if (!user.id.present) return false;
-    final result = await (update(users)..where((u) => u.id.equals(user.id.value))).write(user);
+    final result = await (update(users)
+          ..where((u) => u.id.equals(user.id.value)))
+        .write(user);
     return result > 0;
   }
 
@@ -120,7 +141,9 @@ class AppDatabase extends _$AppDatabase {
 
   Future<bool> updateCategory(CategoriesCompanion category) async {
     if (!category.id.present) return false;
-    final result = await (update(categories)..where((c) => c.id.equals(category.id.value))).write(category);
+    final result = await (update(categories)
+          ..where((c) => c.id.equals(category.id.value)))
+        .write(category);
     return result > 0;
   }
 
@@ -139,7 +162,9 @@ class AppDatabase extends _$AppDatabase {
 
   Future<bool> updateBrand(BrandsCompanion brand) async {
     if (!brand.id.present) return false;
-    final result = await (update(brands)..where((b) => b.id.equals(brand.id.value))).write(brand);
+    final result = await (update(brands)
+          ..where((b) => b.id.equals(brand.id.value)))
+        .write(brand);
     return result > 0;
   }
 
@@ -186,7 +211,9 @@ class AppDatabase extends _$AppDatabase {
 
   Future<bool> updateProduct(ProductsCompanion product) async {
     if (!product.id.present) return false;
-    final result = await (update(products)..where((p) => p.id.equals(product.id.value))).write(product);
+    final result = await (update(products)
+          ..where((p) => p.id.equals(product.id.value)))
+        .write(product);
     return result > 0;
   }
 
@@ -197,7 +224,8 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<Phone?> getPhoneBySerial(String serial) {
-    return (select(phones)..where((p) => p.serialNumber.equals(serial))).getSingleOrNull();
+    return (select(phones)..where((p) => p.serialNumber.equals(serial)))
+        .getSingleOrNull();
   }
 
   Future<List<Phone>> getAllPhones() {
@@ -214,12 +242,15 @@ class AppDatabase extends _$AppDatabase {
 
   Future<bool> updatePhone(PhonesCompanion phone) async {
     if (!phone.id.present) return false;
-    final result = await (update(phones)..where((p) => p.id.equals(phone.id.value))).write(phone);
+    final result = await (update(phones)
+          ..where((p) => p.id.equals(phone.id.value)))
+        .write(phone);
     return result > 0;
   }
 
   Future<bool> sellPhone(int phoneId, int? customerId) async {
-    final result = await (update(phones)..where((p) => p.id.equals(phoneId))).write(
+    final result =
+        await (update(phones)..where((p) => p.id.equals(phoneId))).write(
       PhonesCompanion(
         status: const Value('sold'),
         customerId: Value(customerId),
@@ -232,7 +263,9 @@ class AppDatabase extends _$AppDatabase {
   // ── IMEI ──
 
   Future<bool> isImeiUnique(String imei, {int? excludePhoneId}) async {
-    final existing = await (select(imeis)..where((i) => i.imei.equals(imei) & i.active.equals(true))).get();
+    final existing = await (select(imeis)
+          ..where((i) => i.imei.equals(imei) & i.active.equals(true)))
+        .get();
     if (existing.isEmpty) return true;
     if (excludePhoneId != null) {
       for (final row in existing) {
@@ -254,7 +287,8 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> deactivateImeisForPhone(int phoneId) {
     return (update(imeis)..where((i) => i.phoneId.equals(phoneId))).write(
-      ImeisCompanion(active: const Value(false), deactivatedAt: Value(DateTime.now())),
+      ImeisCompanion(
+          active: const Value(false), deactivatedAt: Value(DateTime.now())),
     );
   }
 
@@ -274,7 +308,8 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<Product>> getLowStockProducts() {
     return (select(products)
-          ..where((p) => p.deletedAt.isNull() & (p.quantity.isSmallerOrEqual(p.minStock)))
+          ..where((p) =>
+              p.deletedAt.isNull() & (p.quantity.isSmallerOrEqual(p.minStock)))
           ..orderBy([(p) => OrderingTerm.asc(p.quantity)]))
         .get();
   }
@@ -331,8 +366,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<List<Sale>> getAllSales() {
-    return (select(sales)
-          ..orderBy([(s) => OrderingTerm.desc(s.saleDate)]))
+    return (select(sales)..orderBy([(s) => OrderingTerm.desc(s.saleDate)]))
         .get();
   }
 
@@ -389,7 +423,9 @@ class AppDatabase extends _$AppDatabase {
 
   Future<bool> updateCustomer(CustomersCompanion customer) async {
     if (!customer.id.present) return false;
-    final result = await (update(customers)..where((c) => c.id.equals(customer.id.value))).write(customer);
+    final result = await (update(customers)
+          ..where((c) => c.id.equals(customer.id.value)))
+        .write(customer);
     return result > 0;
   }
 

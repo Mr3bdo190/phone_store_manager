@@ -32,10 +32,17 @@ class SalesRepositoryImpl implements SalesRepository {
     try {
       // Validate inputs
       if (total < 0) {
-        return (data: null, failure: const ValidationFailure('الإجمالي لا يمكن أن يكون سالباً'));
+        return (
+          data: null,
+          failure: const ValidationFailure('الإجمالي لا يمكن أن يكون سالباً')
+        );
       }
       if (paidAmount < 0) {
-        return (data: null, failure: const ValidationFailure('المبلغ المدفوع لا يمكن أن يكون سالباً'));
+        return (
+          data: null,
+          failure:
+              const ValidationFailure('المبلغ المدفوع لا يمكن أن يكون سالباً')
+        );
       }
       if (paidAmount > total) {
         // Overpayment — still allowed, change due

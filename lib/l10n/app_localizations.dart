@@ -24,7 +24,8 @@ class AppLocalizations {
     final jsonString = await rootBundle.loadString(
       'lib/l10n/app_${locale.languageCode}.arb',
     );
-    final Map<String, dynamic> decoded = jsonDecode(jsonString) as Map<String, dynamic>;
+    final Map<String, dynamic> decoded =
+        jsonDecode(jsonString) as Map<String, dynamic>;
     _localizedValues.clear();
     _localizedValues.addAll(decoded);
     return true;
@@ -70,7 +71,8 @@ class AppLocalizations {
   String get createAccount => _get('createAccount', 'إنشاء حساب');
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override

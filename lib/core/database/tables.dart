@@ -21,18 +21,23 @@ class Users extends Table {
 
 class Settings extends Table {
   IntColumn get id => integer()();
-  TextColumn get storeName => text().withDefault(const Constant('Phone Store Manager'))();
+  TextColumn get storeName =>
+      text().withDefault(const Constant('Phone Store Manager'))();
   TextColumn get storePhone => text().nullable()();
   TextColumn get storeAddress => text().nullable()();
   TextColumn get currencySymbol => text().withDefault(const Constant('ر.س'))();
   TextColumn get currencyCode => text().withDefault(const Constant('SAR'))();
-  BoolColumn get enableInvoiceNumber => boolean().withDefault(const Constant(true))();
+  BoolColumn get enableInvoiceNumber =>
+      boolean().withDefault(const Constant(true))();
   TextColumn get invoicePrefix => text().withDefault(const Constant('INV'))();
   TextColumn get themeMode => text().withDefault(const Constant('light'))();
   TextColumn get languageCode => text().withDefault(const Constant('ar'))();
-  BoolColumn get enableBiometric => boolean().withDefault(const Constant(false))();
-  BoolColumn get enableAutoBackup => boolean().withDefault(const Constant(false))();
-  IntColumn get sessionTimeoutMinutes => integer().withDefault(const Constant(15))();
+  BoolColumn get enableBiometric =>
+      boolean().withDefault(const Constant(false))();
+  BoolColumn get enableAutoBackup =>
+      boolean().withDefault(const Constant(false))();
+  IntColumn get sessionTimeoutMinutes =>
+      integer().withDefault(const Constant(15))();
   TextColumn get logoPath => text().nullable()();
 }
 
@@ -76,16 +81,18 @@ class Products extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL',
-    'FOREIGN KEY (brand_id) REFERENCES brands (id) ON DELETE SET NULL',
-  ];
+        'FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL',
+        'FOREIGN KEY (brand_id) REFERENCES brands (id) ON DELETE SET NULL',
+      ];
 
   List<Index> get indexes => [
-    Index('products_category_idx', 'CREATE INDEX products_category_idx ON products (category_id)'),
-    Index('products_brand_idx', 'CREATE INDEX products_brand_idx ON products (brand_id)'),
-  ];
+        Index('products_category_idx',
+            'CREATE INDEX products_category_idx ON products (category_id)'),
+        Index('products_brand_idx',
+            'CREATE INDEX products_brand_idx ON products (brand_id)'),
+      ];
 }
 
 class Phones extends Table {
@@ -111,18 +118,21 @@ class Phones extends Table {
   DateTimeColumn get deletedAt => dateTime().nullable()();
   TextColumn get notes => text().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL',
-    'FOREIGN KEY (brand_id) REFERENCES brands (id) ON DELETE SET NULL',
-    'FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE SET NULL',
-  ];
+        'FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL',
+        'FOREIGN KEY (brand_id) REFERENCES brands (id) ON DELETE SET NULL',
+        'FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE SET NULL',
+      ];
 
   List<Index> get indexes => [
-    Index('phones_category_idx', 'CREATE INDEX phones_category_idx ON phones (category_id)'),
-    Index('phones_brand_idx', 'CREATE INDEX phones_brand_idx ON phones (brand_id)'),
-    Index('phones_customer_idx', 'CREATE INDEX phones_customer_idx ON phones (customer_id)'),
-  ];
+        Index('phones_category_idx',
+            'CREATE INDEX phones_category_idx ON phones (category_id)'),
+        Index('phones_brand_idx',
+            'CREATE INDEX phones_brand_idx ON phones (brand_id)'),
+        Index('phones_customer_idx',
+            'CREATE INDEX phones_customer_idx ON phones (customer_id)'),
+      ];
 }
 
 class Imeis extends Table {
@@ -133,20 +143,22 @@ class Imeis extends Table {
   DateTimeColumn get createdAt => dateTime().nullable()();
   DateTimeColumn get deactivatedAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('imeis_phone_idx', 'CREATE INDEX imeis_phone_idx ON imeis (phone_id)'),
-  ];
+        Index('imeis_phone_idx',
+            'CREATE INDEX imeis_phone_idx ON imeis (phone_id)'),
+      ];
 }
 
 class Customers extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 100)();
-  TextColumn get phone => text().withLength(min: 1, max: 30).customConstraint('UNIQUE')();
+  TextColumn get phone =>
+      text().withLength(min: 1, max: 30).customConstraint('UNIQUE')();
   TextColumn get address => text().nullable()();
   TextColumn get notes => text().nullable()();
   RealColumn get totalPurchases => real().withDefault(const Constant(0))();
@@ -160,7 +172,8 @@ class Customers extends Table {
 class Suppliers extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 100)();
-  TextColumn get phone => text().withLength(min: 1, max: 30).customConstraint('UNIQUE')();
+  TextColumn get phone =>
+      text().withLength(min: 1, max: 30).customConstraint('UNIQUE')();
   TextColumn get address => text().nullable()();
   TextColumn get notes => text().nullable()();
   RealColumn get totalPurchases => real().withDefault(const Constant(0))();
@@ -190,17 +203,20 @@ class Sales extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE SET NULL',
-    'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE SET NULL',
+        'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('sales_customer_idx', 'CREATE INDEX sales_customer_idx ON sales (customer_id)'),
-    Index('sales_created_by_idx', 'CREATE INDEX sales_created_by_idx ON sales (created_by)'),
-    Index('sales_date_idx', 'CREATE INDEX sales_date_idx ON sales (sale_date)'),
-  ];
+        Index('sales_customer_idx',
+            'CREATE INDEX sales_customer_idx ON sales (customer_id)'),
+        Index('sales_created_by_idx',
+            'CREATE INDEX sales_created_by_idx ON sales (created_by)'),
+        Index('sales_date_idx',
+            'CREATE INDEX sales_date_idx ON sales (sale_date)'),
+      ];
 }
 
 class SaleItems extends Table {
@@ -208,7 +224,8 @@ class SaleItems extends Table {
   IntColumn get saleId => integer()();
   IntColumn get productId => integer().nullable()();
   IntColumn get phoneId => integer().nullable()();
-  TextColumn get serialNumber => text().withLength(min: 1, max: 100).nullable()();
+  TextColumn get serialNumber =>
+      text().withLength(min: 1, max: 100).nullable()();
   IntColumn get quantity => integer().withDefault(const Constant(1))();
   RealColumn get unitPrice => real().withDefault(const Constant(0))();
   RealColumn get purchasePrice => real().withDefault(const Constant(0))();
@@ -217,18 +234,21 @@ class SaleItems extends Table {
   TextColumn get imei1 => text().nullable()();
   TextColumn get imei2 => text().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (sale_id) REFERENCES sales (id) ON DELETE CASCADE',
-    'FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE SET NULL',
-    'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
-  ];
+        'FOREIGN KEY (sale_id) REFERENCES sales (id) ON DELETE CASCADE',
+        'FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE SET NULL',
+        'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
+      ];
 
   List<Index> get indexes => [
-    Index('sale_items_sale_idx', 'CREATE INDEX sale_items_sale_idx ON sale_items (sale_id)'),
-    Index('sale_items_product_idx', 'CREATE INDEX sale_items_product_idx ON sale_items (product_id)'),
-    Index('sale_items_phone_idx', 'CREATE INDEX sale_items_phone_idx ON sale_items (phone_id)'),
-  ];
+        Index('sale_items_sale_idx',
+            'CREATE INDEX sale_items_sale_idx ON sale_items (sale_id)'),
+        Index('sale_items_product_idx',
+            'CREATE INDEX sale_items_product_idx ON sale_items (product_id)'),
+        Index('sale_items_phone_idx',
+            'CREATE INDEX sale_items_phone_idx ON sale_items (phone_id)'),
+      ];
 }
 
 class SalePayments extends Table {
@@ -239,14 +259,15 @@ class SalePayments extends Table {
   DateTimeColumn get paidAt => dateTime().nullable()();
   TextColumn get notes => text().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (sale_id) REFERENCES sales (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (sale_id) REFERENCES sales (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('sale_payments_sale_idx', 'CREATE INDEX sale_payments_sale_idx ON sale_payments (sale_id)'),
-  ];
+        Index('sale_payments_sale_idx',
+            'CREATE INDEX sale_payments_sale_idx ON sale_payments (sale_id)'),
+      ];
 }
 
 class Purchases extends Table {
@@ -267,17 +288,20 @@ class Purchases extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (supplier_id) REFERENCES suppliers (id) ON DELETE SET NULL',
-    'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (supplier_id) REFERENCES suppliers (id) ON DELETE SET NULL',
+        'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('purchases_supplier_idx', 'CREATE INDEX purchases_supplier_idx ON purchases (supplier_id)'),
-    Index('purchases_created_by_idx', 'CREATE INDEX purchases_created_by_idx ON purchases (created_by)'),
-    Index('purchases_date_idx', 'CREATE INDEX purchases_date_idx ON purchases (purchase_date)'),
-  ];
+        Index('purchases_supplier_idx',
+            'CREATE INDEX purchases_supplier_idx ON purchases (supplier_id)'),
+        Index('purchases_created_by_idx',
+            'CREATE INDEX purchases_created_by_idx ON purchases (created_by)'),
+        Index('purchases_date_idx',
+            'CREATE INDEX purchases_date_idx ON purchases (purchase_date)'),
+      ];
 }
 
 class PurchaseItems extends Table {
@@ -285,25 +309,29 @@ class PurchaseItems extends Table {
   IntColumn get purchaseId => integer()();
   IntColumn get productId => integer().nullable()();
   IntColumn get phoneId => integer().nullable()();
-  TextColumn get serialNumber => text().withLength(min: 1, max: 100).nullable()();
+  TextColumn get serialNumber =>
+      text().withLength(min: 1, max: 100).nullable()();
   IntColumn get quantity => integer().withDefault(const Constant(1))();
   RealColumn get unitPrice => real().withDefault(const Constant(0))();
   RealColumn get total => real().withDefault(const Constant(0))();
   TextColumn get imei1 => text().nullable()();
   TextColumn get imei2 => text().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (purchase_id) REFERENCES purchases (id) ON DELETE CASCADE',
-    'FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE SET NULL',
-    'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
-  ];
+        'FOREIGN KEY (purchase_id) REFERENCES purchases (id) ON DELETE CASCADE',
+        'FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE SET NULL',
+        'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
+      ];
 
   List<Index> get indexes => [
-    Index('purchase_items_purchase_idx', 'CREATE INDEX purchase_items_purchase_idx ON purchase_items (purchase_id)'),
-    Index('purchase_items_product_idx', 'CREATE INDEX purchase_items_product_idx ON purchase_items (product_id)'),
-    Index('purchase_items_phone_idx', 'CREATE INDEX purchase_items_phone_idx ON purchase_items (phone_id)'),
-  ];
+        Index('purchase_items_purchase_idx',
+            'CREATE INDEX purchase_items_purchase_idx ON purchase_items (purchase_id)'),
+        Index('purchase_items_product_idx',
+            'CREATE INDEX purchase_items_product_idx ON purchase_items (product_id)'),
+        Index('purchase_items_phone_idx',
+            'CREATE INDEX purchase_items_phone_idx ON purchase_items (phone_id)'),
+      ];
 }
 
 class PurchasePayments extends Table {
@@ -314,14 +342,15 @@ class PurchasePayments extends Table {
   DateTimeColumn get paidAt => dateTime().nullable()();
   TextColumn get notes => text().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (purchase_id) REFERENCES purchases (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (purchase_id) REFERENCES purchases (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('purchase_payments_purchase_idx', 'CREATE INDEX purchase_payments_purchase_idx ON purchase_payments (purchase_id)'),
-  ];
+        Index('purchase_payments_purchase_idx',
+            'CREATE INDEX purchase_payments_purchase_idx ON purchase_payments (purchase_id)'),
+      ];
 }
 
 class Returns extends Table {
@@ -335,15 +364,16 @@ class Returns extends Table {
   DateTimeColumn get returnDate => dateTime()();
   DateTimeColumn get createdAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (sale_id) REFERENCES sales (id) ON DELETE CASCADE',
-    'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (sale_id) REFERENCES sales (id) ON DELETE CASCADE',
+        'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('returns_sale_idx', 'CREATE INDEX returns_sale_idx ON returns (sale_id)'),
-  ];
+        Index('returns_sale_idx',
+            'CREATE INDEX returns_sale_idx ON returns (sale_id)'),
+      ];
 }
 
 class ReturnItems extends Table {
@@ -356,16 +386,17 @@ class ReturnItems extends Table {
   RealColumn get total => real().withDefault(const Constant(0))();
   TextColumn get reason => text().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (return_id) REFERENCES returns (id) ON DELETE CASCADE',
-    'FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE SET NULL',
-    'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
-  ];
+        'FOREIGN KEY (return_id) REFERENCES returns (id) ON DELETE CASCADE',
+        'FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE SET NULL',
+        'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
+      ];
 
   List<Index> get indexes => [
-    Index('return_items_return_idx', 'CREATE INDEX return_items_return_idx ON return_items (return_id)'),
-  ];
+        Index('return_items_return_idx',
+            'CREATE INDEX return_items_return_idx ON return_items (return_id)'),
+      ];
 }
 
 class InventoryMovements extends Table {
@@ -383,19 +414,23 @@ class InventoryMovements extends Table {
   TextColumn get notes => text().nullable()();
   DateTimeColumn get createdAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE SET NULL',
-    'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
-    'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE SET NULL',
+        'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
+        'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('inventory_product_idx', 'CREATE INDEX inventory_product_idx ON inventory_movements (product_id)'),
-    Index('inventory_phone_idx', 'CREATE INDEX inventory_phone_idx ON inventory_movements (phone_id)'),
-    Index('inventory_user_idx', 'CREATE INDEX inventory_user_idx ON inventory_movements (user_id)'),
-    Index('inventory_date_idx', 'CREATE INDEX inventory_date_idx ON inventory_movements (created_at)'),
-  ];
+        Index('inventory_product_idx',
+            'CREATE INDEX inventory_product_idx ON inventory_movements (product_id)'),
+        Index('inventory_phone_idx',
+            'CREATE INDEX inventory_phone_idx ON inventory_movements (phone_id)'),
+        Index('inventory_user_idx',
+            'CREATE INDEX inventory_user_idx ON inventory_movements (user_id)'),
+        Index('inventory_date_idx',
+            'CREATE INDEX inventory_date_idx ON inventory_movements (created_at)'),
+      ];
 }
 
 class Expenses extends Table {
@@ -410,15 +445,17 @@ class Expenses extends Table {
   DateTimeColumn get createdAt => dateTime().nullable()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('expenses_created_by_idx', 'CREATE INDEX expenses_created_by_idx ON expenses (created_by)'),
-    Index('expenses_date_idx', 'CREATE INDEX expenses_date_idx ON expenses (expense_date)'),
-  ];
+        Index('expenses_created_by_idx',
+            'CREATE INDEX expenses_created_by_idx ON expenses (created_by)'),
+        Index('expenses_date_idx',
+            'CREATE INDEX expenses_date_idx ON expenses (expense_date)'),
+      ];
 }
 
 class CashTransactions extends Table {
@@ -433,15 +470,17 @@ class CashTransactions extends Table {
   DateTimeColumn get transactionDate => dateTime()();
   DateTimeColumn get createdAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('cash_user_idx', 'CREATE INDEX cash_user_idx ON cash_transactions (user_id)'),
-    Index('cash_date_idx', 'CREATE INDEX cash_date_idx ON cash_transactions (transaction_date)'),
-  ];
+        Index('cash_user_idx',
+            'CREATE INDEX cash_user_idx ON cash_transactions (user_id)'),
+        Index('cash_date_idx',
+            'CREATE INDEX cash_date_idx ON cash_transactions (transaction_date)'),
+      ];
 }
 
 class Repairs extends Table {
@@ -468,18 +507,21 @@ class Repairs extends Table {
   DateTimeColumn get createdAt => dateTime().nullable()();
   DateTimeColumn get updatedAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE',
-    'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
-    'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE',
+        'FOREIGN KEY (phone_id) REFERENCES phones (id) ON DELETE SET NULL',
+        'FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('repairs_customer_idx', 'CREATE INDEX repairs_customer_idx ON repairs (customer_id)'),
-    Index('repairs_status_idx', 'CREATE INDEX repairs_status_idx ON repairs (status)'),
-    Index('repairs_created_by_idx', 'CREATE INDEX repairs_created_by_idx ON repairs (created_by)'),
-  ];
+        Index('repairs_customer_idx',
+            'CREATE INDEX repairs_customer_idx ON repairs (customer_id)'),
+        Index('repairs_status_idx',
+            'CREATE INDEX repairs_status_idx ON repairs (status)'),
+        Index('repairs_created_by_idx',
+            'CREATE INDEX repairs_created_by_idx ON repairs (created_by)'),
+      ];
 }
 
 class RepairPhotos extends Table {
@@ -488,14 +530,15 @@ class RepairPhotos extends Table {
   TextColumn get photoPath => text()();
   DateTimeColumn get createdAt => dateTime().nullable()();
 
-@override
+  @override
   List<String> get customConstraints => [
-    'FOREIGN KEY (repair_id) REFERENCES repairs (id) ON DELETE CASCADE',
-  ];
+        'FOREIGN KEY (repair_id) REFERENCES repairs (id) ON DELETE CASCADE',
+      ];
 
   List<Index> get indexes => [
-    Index('repair_photos_repair_idx', 'CREATE INDEX repair_photos_repair_idx ON repair_photos (repair_id)'),
-  ];
+        Index('repair_photos_repair_idx',
+            'CREATE INDEX repair_photos_repair_idx ON repair_photos (repair_id)'),
+      ];
 }
 
 class AuditLogs extends Table {
@@ -512,8 +555,11 @@ class AuditLogs extends Table {
   DateTimeColumn get timestamp => dateTime().nullable()();
 
   List<Index> get indexes => [
-    Index('audit_user_idx', 'CREATE INDEX audit_user_idx ON audit_logs (user_id)'),
-    Index('audit_action_idx', 'CREATE INDEX audit_action_idx ON audit_logs (action)'),
-    Index('audit_timestamp_idx', 'CREATE INDEX audit_timestamp_idx ON audit_logs (timestamp)'),
-  ];
+        Index('audit_user_idx',
+            'CREATE INDEX audit_user_idx ON audit_logs (user_id)'),
+        Index('audit_action_idx',
+            'CREATE INDEX audit_action_idx ON audit_logs (action)'),
+        Index('audit_timestamp_idx',
+            'CREATE INDEX audit_timestamp_idx ON audit_logs (timestamp)'),
+      ];
 }

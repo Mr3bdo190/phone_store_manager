@@ -62,7 +62,8 @@ class _LowStockContent extends StatelessWidget {
               child: ListTile(
                 leading: const CircleAvatar(child: Icon(Icons.inventory_2)),
                 title: Text(product.name),
-                subtitle: Text('SKU: ${product.sku} | متوفر: ${product.quantity} | الحد الأدنى: ${product.minStock}'),
+                subtitle: Text(
+                    'SKU: ${product.sku} | متوفر: ${product.quantity} | الحد الأدنى: ${product.minStock}'),
                 trailing: const Icon(Icons.warning, color: Colors.orange),
               ),
             );

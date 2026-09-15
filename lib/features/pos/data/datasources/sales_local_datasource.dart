@@ -34,7 +34,8 @@ class SalesLocalDataSourceImpl implements SalesLocalDataSource {
   @override
   Future<String> generateInvoiceNumber(String prefix) async {
     final today = DateTime.now();
-    final datePart = '${today.year}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}';
+    final datePart =
+        '${today.year}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}';
 
     final start = DateTime(today.year, today.month, today.day);
     final end = start.add(const Duration(days: 1));
@@ -72,7 +73,10 @@ class SalesLocalDataSourceImpl implements SalesLocalDataSource {
                 ..where((p) => p.id.equals(item.productId!)))
               .getSingle();
           if (product.quantity < item.quantity) {
-            return (data: null, error: 'الكمية المتوفرة غير كافية للمنتج: ${item.productName}');
+            return (
+              data: null,
+              error: 'الكمية المتوفرة غير كافية للمنتج: ${item.productName}'
+            );
           }
         }
         if (item.phoneId != null) {
@@ -80,37 +84,44 @@ class SalesLocalDataSourceImpl implements SalesLocalDataSource {
                 ..where((p) => p.id.equals(item.phoneId!)))
               .getSingle();
           if (phone.quantity < item.quantity) {
-            return (data: null, error: 'الكمية المتوفرة غير كافية للجهاز: ${item.productName}');
+            return (
+              data: null,
+              error: 'الكمية المتوفرة غير كافية للجهاز: ${item.productName}'
+            );
           }
         }
       }
 
       final saleSettings = await database.getSettingsOrDefault();
-      final invoiceNumber = await generateInvoiceNumber(saleSettings.invoicePrefix);
+      final invoiceNumber =
+          await generateInvoiceNumber(saleSettings.invoicePrefix);
 
       // Use transaction for atomicity
       return await database.transaction(() async {
         // 1. Create the sale
-        final saleId = await database.into(database.sales).insert(db.SalesCompanion.insert(
-              invoiceNumber: invoiceNumber,
-              customerId: Value(customerId),
-              paymentMethod: Value(paymentMethod),
-              subtotal: Value(subtotal),
-              discount: Value(discount),
-              tax: Value(tax),
-              total: Value(total),
-              paidAmount: Value(paidAmount),
-              saleType: const Value('cash'),
-              status: const Value('completed'),
-              saleDate: DateTime.now(),
-              createdBy: createdBy ?? 1,
-              createdAt: Value(DateTime.now()),
-              updatedAt: Value(DateTime.now()),
-            ));
+        final saleId =
+            await database.into(database.sales).insert(db.SalesCompanion.insert(
+                  invoiceNumber: invoiceNumber,
+                  customerId: Value(customerId),
+                  paymentMethod: Value(paymentMethod),
+                  subtotal: Value(subtotal),
+                  discount: Value(discount),
+                  tax: Value(tax),
+                  total: Value(total),
+                  paidAmount: Value(paidAmount),
+                  saleType: const Value('cash'),
+                  status: const Value('completed'),
+                  saleDate: DateTime.now(),
+                  createdBy: createdBy ?? 1,
+                  createdAt: Value(DateTime.now()),
+                  updatedAt: Value(DateTime.now()),
+                ));
 
         // 2. Create sale items + update inventory
         for (final item in items) {
-          await database.into(database.saleItems).insert(db.SaleItemsCompanion.insert(
+          await database
+              .into(database.saleItems)
+              .insert(db.SaleItemsCompanion.insert(
                 saleId: saleId,
                 productId: Value(item.productId),
                 phoneId: Value(item.phoneId),
@@ -129,8 +140,11 @@ class SalesLocalDataSourceImpl implements SalesLocalDataSource {
                   ..where((p) => p.id.equals(item.productId!)))
                 .getSingle();
 
-            await (database.update(database.products)..where((p) => p.id.equals(item.productId!))).write(
-              db.ProductsCompanion(quantity: Value(product.quantity - item.quantity)),
+            await (database.update(database.products)
+                  ..where((p) => p.id.equals(item.productId!)))
+                .write(
+              db.ProductsCompanion(
+                  quantity: Value(product.quantity - item.quantity)),
             );
 
             await database.insertMovement(db.InventoryMovementsCompanion.insert(
@@ -154,7 +168,9 @@ class SalesLocalDataSourceImpl implements SalesLocalDataSource {
                 .getSingle();
 
             if (phone.quantity > 0) {
-              await (database.update(database.phones)..where((p) => p.id.equals(item.phoneId!))).write(
+              await (database.update(database.phones)
+                    ..where((p) => p.id.equals(item.phoneId!)))
+                  .write(
                 db.PhonesCompanion(
                   quantity: Value(phone.quantity - 1),
                   status: const Value('sold'),
@@ -170,14 +186,18 @@ class SalesLocalDataSourceImpl implements SalesLocalDataSource {
 
         // 3. Record sale payment if cash
         if (paymentMethod == 'cash' && paidAmount > 0) {
-          await database.into(database.salePayments).insert(db.SalePaymentsCompanion.insert(
+          await database
+              .into(database.salePayments)
+              .insert(db.SalePaymentsCompanion.insert(
                 saleId: saleId,
                 amount: paidAmount,
                 method: Value(paymentMethod),
                 paidAt: Value(DateTime.now()),
               ));
 
-          await database.into(database.cashTransactions).insert(db.CashTransactionsCompanion.insert(
+          await database
+              .into(database.cashTransactions)
+              .insert(db.CashTransactionsCompanion.insert(
                 transactionType: 'sale',
                 amount: paidAmount,
                 balanceAfter: await _calculateBalance(paidAmount),
@@ -196,7 +216,9 @@ class SalesLocalDataSourceImpl implements SalesLocalDataSource {
                 ..where((c) => c.id.equals(cid)))
               .getSingle();
           final debt = total - paidAmount;
-          await (database.update(database.customers)..where((c) => c.id.equals(cid))).write(
+          await (database.update(database.customers)
+                ..where((c) => c.id.equals(cid)))
+              .write(
             db.CustomersCompanion(
               remainingDebt: Value(customer.remainingDebt + debt),
               totalPurchases: Value(customer.totalPurchases + total),
@@ -204,7 +226,9 @@ class SalesLocalDataSourceImpl implements SalesLocalDataSource {
             ),
           );
 
-          await database.into(database.cashTransactions).insert(db.CashTransactionsCompanion.insert(
+          await database
+              .into(database.cashTransactions)
+              .insert(db.CashTransactionsCompanion.insert(
                 transactionType: 'debt',
                 amount: -debt,
                 balanceAfter: await _calculateBalance(-debt),

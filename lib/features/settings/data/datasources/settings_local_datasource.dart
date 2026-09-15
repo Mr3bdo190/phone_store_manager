@@ -19,7 +19,9 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
 
   @override
   Future<StoreSettings> getSettings() async {
-    final row = await (database.select(database.settings)..where((s) => s.id.equals(1))).getSingleOrNull();
+    final row = await (database.select(database.settings)
+          ..where((s) => s.id.equals(1)))
+        .getSingleOrNull();
     if (row == null) {
       // Return default settings
       return StoreSettings();

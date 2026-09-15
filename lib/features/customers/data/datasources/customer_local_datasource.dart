@@ -10,7 +10,11 @@ import '../../domain/entities/customer.dart';
 abstract class CustomerLocalDataSource {
   Future<List<Customer>> getAllCustomers();
   Future<List<Customer>> searchCustomers(String query);
-  Future<int> createCustomer({required String name, required String phone, String? address, String? notes});
+  Future<int> createCustomer(
+      {required String name,
+      required String phone,
+      String? address,
+      String? notes});
   Future<bool> updateCustomer(Customer customer);
   Future<bool> deleteCustomer(int id);
 }
@@ -47,7 +51,11 @@ class CustomerLocalDataSourceImpl implements CustomerLocalDataSource {
   }
 
   @override
-  Future<int> createCustomer({required String name, required String phone, String? address, String? notes}) {
+  Future<int> createCustomer(
+      {required String name,
+      required String phone,
+      String? address,
+      String? notes}) {
     return database.createCustomer(db.CustomersCompanion.insert(
       name: name,
       phone: phone,
@@ -76,7 +84,9 @@ class CustomerLocalDataSourceImpl implements CustomerLocalDataSource {
 
   @override
   Future<bool> deleteCustomer(int id) async {
-    final result = await (database.update(database.customers)..where((c) => c.id.equals(id))).write(
+    final result = await (database.update(database.customers)
+          ..where((c) => c.id.equals(id)))
+        .write(
       db.CustomersCompanion(deletedAt: Value(DateTime.now())),
     );
     return result > 0;

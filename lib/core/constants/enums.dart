@@ -21,8 +21,8 @@ extension UserRoleLabel on UserRole {
 
   String get key => name;
 
-  static UserRole fromKey(String key) =>
-      UserRole.values.firstWhere((e) => e.name == key, orElse: () => UserRole.employee);
+  static UserRole fromKey(String key) => UserRole.values
+      .firstWhere((e) => e.name == key, orElse: () => UserRole.employee);
 }
 
 /// Gender for [Customer] or [Supplier].

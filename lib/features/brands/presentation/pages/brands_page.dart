@@ -38,19 +38,22 @@ class _BrandsPageState extends State<BrandsPage> {
   Future<void> _addBrand() async {
     final result = await _showEditDialog();
     if (result != null) {
-      await _repository.createBrand(name: result.name, description: result.description);
+      await _repository.createBrand(
+          name: result.name, description: result.description);
       await _loadBrands();
     }
   }
 
   Future<Brand?> _showEditDialog({Brand? brand}) async {
     final nameController = TextEditingController(text: brand?.name ?? '');
-    final descController = TextEditingController(text: brand?.description ?? '');
+    final descController =
+        TextEditingController(text: brand?.description ?? '');
 
     final result = await showDialog<Brand>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(brand == null ? 'إضافة علامة تجارية' : 'تعديل علامة تجارية'),
+        title:
+            Text(brand == null ? 'إضافة علامة تجارية' : 'تعديل علامة تجارية'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -109,9 +112,11 @@ class _BrandsPageState extends State<BrandsPage> {
                   itemBuilder: (context, index) {
                     final b = _brands[index];
                     return ListTile(
-                      leading: const CircleAvatar(child: Icon(Icons.branding_watermark)),
+                      leading: const CircleAvatar(
+                          child: Icon(Icons.branding_watermark)),
                       title: Text(b.name),
-                      subtitle: b.description != null ? Text(b.description!) : null,
+                      subtitle:
+                          b.description != null ? Text(b.description!) : null,
                       trailing: IconButton(
                         icon: const Icon(Icons.edit, size: 20),
                         onPressed: () async {

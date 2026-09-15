@@ -8,6 +8,7 @@ import '../entities/store_info.dart';
 
 abstract class SettingsRepository {
   Future<({StoreSettings? data, Failure? failure})> getSettings();
-  Future<({bool data, Failure? failure})> updateSettings(StoreSettings settings);
+  Future<({bool data, Failure? failure})> updateSettings(
+      StoreSettings settings);
   Future<({StoreInfo? data, Failure? failure})> getStoreInfo();
 }

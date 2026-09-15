@@ -160,7 +160,9 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
 
   @override
   Future<bool> deleteProduct(int id) async {
-    final result = await (database.update(database.products)..where((p) => p.id.equals(id))).write(
+    final result = await (database.update(database.products)
+          ..where((p) => p.id.equals(id)))
+        .write(
       db.ProductsCompanion(deletedAt: Value(DateTime.now())),
     );
     return result > 0;

@@ -28,7 +28,8 @@ abstract class PhoneRepository {
     List<String>? imeis,
   });
   Future<({bool data, Failure? failure})> updatePhone(Phone phone);
-  Future<({bool data, Failure? failure})> sellPhone(int phoneId, int? customerId);
+  Future<({bool data, Failure? failure})> sellPhone(
+      int phoneId, int? customerId);
   Future<List<Imei>> getImeisForPhone(int phoneId);
   Future<({bool data, Failure? failure})> addImei({
     required int phoneId,

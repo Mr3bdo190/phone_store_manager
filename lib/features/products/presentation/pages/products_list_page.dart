@@ -72,7 +72,10 @@ class _ProductsListPageState extends State<ProductsListPage> {
                     final product = _filtered[index];
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.1),
                         child: const Icon(Icons.inventory_2),
                       ),
                       title: Text(product.name),
@@ -168,7 +171,8 @@ class _ProductSearchDelegate extends SearchDelegate<String> {
             final product = results[index];
             return ListTile(
               title: Text(product.name),
-              subtitle: Text('${product.sku} | ${product.sellingPrice.toStringAsFixed(2)} ر.س'),
+              subtitle: Text(
+                  '${product.sku} | ${product.sellingPrice.toStringAsFixed(2)} ر.س'),
               onTap: () => close(context, product.name),
             );
           },

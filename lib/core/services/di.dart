@@ -76,15 +76,23 @@ Future<void> initDependencies(AppDatabase database) async {
   di.register<SalesLocalDataSource>(SalesLocalDataSourceImpl(database));
 
   // Repositories
-  di.register<AuthRepository>(AuthRepositoryImpl(di.get<AuthLocalDataSource>()));
+  di.register<AuthRepository>(
+      AuthRepositoryImpl(di.get<AuthLocalDataSource>()));
   di.register<SettingsRepository>(
     SettingsRepositoryImpl(di.get<SettingsLocalDataSource>()),
   );
-  di.register<CategoryRepository>(CategoryRepositoryImpl(di.get<CategoryLocalDataSource>()));
-  di.register<BrandRepository>(BrandRepositoryImpl(di.get<BrandLocalDataSource>()));
-  di.register<ProductRepository>(ProductRepositoryImpl(di.get<ProductLocalDataSource>()));
-  di.register<CustomerRepository>(CustomerRepositoryImpl(di.get<CustomerLocalDataSource>()));
-  di.register<PhoneRepository>(PhoneRepositoryImpl(di.get<PhoneLocalDataSource>()));
-  di.register<InventoryRepository>(InventoryRepositoryImpl(di.get<InventoryLocalDataSource>()));
-  di.register<SalesRepository>(SalesRepositoryImpl(di.get<SalesLocalDataSource>()));
+  di.register<CategoryRepository>(
+      CategoryRepositoryImpl(di.get<CategoryLocalDataSource>()));
+  di.register<BrandRepository>(
+      BrandRepositoryImpl(di.get<BrandLocalDataSource>()));
+  di.register<ProductRepository>(
+      ProductRepositoryImpl(di.get<ProductLocalDataSource>()));
+  di.register<CustomerRepository>(
+      CustomerRepositoryImpl(di.get<CustomerLocalDataSource>()));
+  di.register<PhoneRepository>(
+      PhoneRepositoryImpl(di.get<PhoneLocalDataSource>()));
+  di.register<InventoryRepository>(
+      InventoryRepositoryImpl(di.get<InventoryLocalDataSource>()));
+  di.register<SalesRepository>(
+      SalesRepositoryImpl(di.get<SalesLocalDataSource>()));
 }

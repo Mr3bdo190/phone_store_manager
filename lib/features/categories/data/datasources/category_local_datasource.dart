@@ -67,7 +67,9 @@ class CategoryLocalDataSourceImpl implements CategoryLocalDataSource {
 
   @override
   Future<bool> deleteCategory(int id) async {
-    final result = await (database.update(database.categories)..where((c) => c.id.equals(id))).write(
+    final result = await (database.update(database.categories)
+          ..where((c) => c.id.equals(id)))
+        .write(
       db.CategoriesCompanion(deletedAt: Value(DateTime.now())),
     );
     return result > 0;

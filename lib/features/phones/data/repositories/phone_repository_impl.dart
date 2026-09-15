@@ -42,29 +42,50 @@ class PhoneRepositoryImpl implements PhoneRepository {
   }) async {
     try {
       if (name.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('اسم الجهاز مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('اسم الجهاز مطلوب')
+        );
       }
       if (sku.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('رمز المنتج (SKU) مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('رمز المنتج (SKU) مطلوب')
+        );
       }
       if (serialNumber.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('رقم التسلسل مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('رقم التسلسل مطلوب')
+        );
       }
       if (purchasePrice < 0) {
-        return (data: null, failure: const ValidationFailure('سعر الشراء غير صالح'));
+        return (
+          data: null,
+          failure: const ValidationFailure('سعر الشراء غير صالح')
+        );
       }
       if (sellingPrice < 0) {
-        return (data: null, failure: const ValidationFailure('سعر البيع غير صالح'));
+        return (
+          data: null,
+          failure: const ValidationFailure('سعر البيع غير صالح')
+        );
       }
       if (quantity < 0) {
-        return (data: null, failure: const ValidationFailure('الكمية غير صالحة'));
+        return (
+          data: null,
+          failure: const ValidationFailure('الكمية غير صالحة')
+        );
       }
 
       // Validate IMEIs if provided
       if (imeis != null) {
         for (final imei in imeis) {
           if (imei.isNotEmpty && !ImeiValidator.isValid(imei)) {
-            return (data: null, failure: ValidationFailure('رقم IMEI غير صالح: $imei'));
+            return (
+              data: null,
+              failure: ValidationFailure('رقم IMEI غير صالح: $imei')
+            );
           }
         }
       }
@@ -75,7 +96,10 @@ class PhoneRepositoryImpl implements PhoneRepository {
           if (imei.isNotEmpty) {
             final isUnique = await localDataSource.isImeiUnique(imei);
             if (!isUnique) {
-              return (data: null, failure: ValidationFailure('رقم IMEI مكرر: $imei'));
+              return (
+                data: null,
+                failure: ValidationFailure('رقم IMEI مكرر: $imei')
+              );
             }
           }
         }
@@ -114,7 +138,8 @@ class PhoneRepositoryImpl implements PhoneRepository {
   }
 
   @override
-  Future<({bool data, Failure? failure})> sellPhone(int phoneId, int? customerId) async {
+  Future<({bool data, Failure? failure})> sellPhone(
+      int phoneId, int? customerId) async {
     try {
       final success = await localDataSource.sellPhone(phoneId, customerId);
       // Deactivate IMEIs when phone is sold
@@ -140,12 +165,19 @@ class PhoneRepositoryImpl implements PhoneRepository {
   }) async {
     try {
       if (!ImeiValidator.isValid(imei)) {
-        return (data: false, failure: const ValidationFailure('رقم IMEI غير صالح'));
+        return (
+          data: false,
+          failure: const ValidationFailure('رقم IMEI غير صالح')
+        );
       }
 
-      final isUnique = await localDataSource.isImeiUnique(imei, excludePhoneId: excludeImeiId);
+      final isUnique = await localDataSource.isImeiUnique(imei,
+          excludePhoneId: excludeImeiId);
       if (!isUnique) {
-        return (data: false, failure: const ValidationFailure('رقم IMEI مستخدم من قبل جهاز آخر'));
+        return (
+          data: false,
+          failure: const ValidationFailure('رقم IMEI مستخدم من قبل جهاز آخر')
+        );
       }
 
       await localDataSource.insertImei(phoneId, imei);

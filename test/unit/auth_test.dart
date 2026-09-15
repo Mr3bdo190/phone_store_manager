@@ -79,7 +79,8 @@ void main() {
         role: UserRole.admin.name,
       );
 
-      final result = await repository.login(username: 'admin', password: 'password123');
+      final result =
+          await repository.login(username: 'admin', password: 'password123');
       expect(result.data, isNotNull);
       expect(result.data!.username, 'admin');
       expect(result.data!.role, UserRole.admin);
@@ -93,7 +94,8 @@ void main() {
         role: UserRole.admin.name,
       );
 
-      final result = await repository.login(username: 'admin', password: 'wrong');
+      final result =
+          await repository.login(username: 'admin', password: 'wrong');
       expect(result.data, isNull);
       expect(result.failure, isNotNull);
     });

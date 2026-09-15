@@ -57,25 +57,43 @@ class ProductRepositoryImpl implements ProductRepository {
   }) async {
     try {
       if (name.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('اسم المنتج مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('اسم المنتج مطلوب')
+        );
       }
       if (sku.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('رمز المنتج (SKU) مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('رمز المنتج (SKU) مطلوب')
+        );
       }
       if (barcode.trim().isEmpty) {
         return (data: null, failure: const ValidationFailure('الباركود مطلوب'));
       }
       if (purchasePrice < 0) {
-        return (data: null, failure: const ValidationFailure('سعر الشراء لا يمكن أن يكون سالباً'));
+        return (
+          data: null,
+          failure: const ValidationFailure('سعر الشراء لا يمكن أن يكون سالباً')
+        );
       }
       if (sellingPrice < 0) {
-        return (data: null, failure: const ValidationFailure('سعر البيع لا يمكن أن يكون سالباً'));
+        return (
+          data: null,
+          failure: const ValidationFailure('سعر البيع لا يمكن أن يكون سالباً')
+        );
       }
       if (quantity < 0) {
-        return (data: null, failure: const ValidationFailure('الكمية لا يمكن أن تكون سالبة'));
+        return (
+          data: null,
+          failure: const ValidationFailure('الكمية لا يمكن أن تكون سالبة')
+        );
       }
       if (minStock < 0) {
-        return (data: null, failure: const ValidationFailure('الحد الأدنى للمخزون غير صالح'));
+        return (
+          data: null,
+          failure: const ValidationFailure('الحد الأدنى للمخزون غير صالح')
+        );
       }
 
       final id = await localDataSource.createProduct(
@@ -105,13 +123,22 @@ class ProductRepositoryImpl implements ProductRepository {
   Future<({bool data, Failure? failure})> updateProduct(Product product) async {
     try {
       if (product.purchasePrice < 0) {
-        return (data: false, failure: const ValidationFailure('سعر الشراء غير صالح'));
+        return (
+          data: false,
+          failure: const ValidationFailure('سعر الشراء غير صالح')
+        );
       }
       if (product.sellingPrice < 0) {
-        return (data: false, failure: const ValidationFailure('سعر البيع غير صالح'));
+        return (
+          data: false,
+          failure: const ValidationFailure('سعر البيع غير صالح')
+        );
       }
       if (product.quantity < 0) {
-        return (data: false, failure: const ValidationFailure('الكمية غير صالحة'));
+        return (
+          data: false,
+          failure: const ValidationFailure('الكمية غير صالحة')
+        );
       }
 
       final success = await localDataSource.updateProduct(product);

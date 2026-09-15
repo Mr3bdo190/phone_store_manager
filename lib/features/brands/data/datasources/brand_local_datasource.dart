@@ -67,7 +67,9 @@ class BrandLocalDataSourceImpl implements BrandLocalDataSource {
 
   @override
   Future<bool> deleteBrand(int id) async {
-    final result = await (database.update(database.brands)..where((b) => b.id.equals(id))).write(
+    final result = await (database.update(database.brands)
+          ..where((b) => b.id.equals(id)))
+        .write(
       db.BrandsCompanion(deletedAt: Value(DateTime.now())),
     );
     return result > 0;

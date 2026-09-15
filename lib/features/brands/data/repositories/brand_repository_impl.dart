@@ -29,9 +29,13 @@ class BrandRepositoryImpl implements BrandRepository {
   }) async {
     try {
       if (name.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('اسم العلامة التجارية مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('اسم العلامة التجارية مطلوب')
+        );
       }
-      final id = await localDataSource.createBrand(name: name, description: description);
+      final id = await localDataSource.createBrand(
+          name: name, description: description);
       return (data: id, failure: null);
     } catch (e) {
       return (data: null, failure: DatabaseFailure(e.toString()));

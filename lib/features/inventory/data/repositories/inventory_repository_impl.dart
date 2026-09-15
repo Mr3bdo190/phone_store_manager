@@ -31,10 +31,16 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }) async {
     try {
       if (newQuantity < 0) {
-        return (data: false, failure: const ValidationFailure('الكمية لا يمكن أن تكون سالية'));
+        return (
+          data: false,
+          failure: const ValidationFailure('الكمية لا يمكن أن تكون سالية')
+        );
       }
       if (reason.trim().isEmpty) {
-        return (data: false, failure: const ValidationFailure('سبب التعديل مطلوب'));
+        return (
+          data: false,
+          failure: const ValidationFailure('سبب التعديل مطلوب')
+        );
       }
       final success = await localDataSource.adjustStock(
         productId: productId,

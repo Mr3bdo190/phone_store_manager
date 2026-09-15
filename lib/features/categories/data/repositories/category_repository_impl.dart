@@ -29,9 +29,13 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }) async {
     try {
       if (name.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('اسم الفئة مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('اسم الفئة مطلوب')
+        );
       }
-      final id = await localDataSource.createCategory(name: name, description: description);
+      final id = await localDataSource.createCategory(
+          name: name, description: description);
       return (data: id, failure: null);
     } catch (e) {
       return (data: null, failure: DatabaseFailure(e.toString()));
@@ -39,7 +43,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
-  Future<({bool data, Failure? failure})> updateCategory(Category category) async {
+  Future<({bool data, Failure? failure})> updateCategory(
+      Category category) async {
     try {
       final success = await localDataSource.updateCategory(category);
       return (data: success, failure: null);

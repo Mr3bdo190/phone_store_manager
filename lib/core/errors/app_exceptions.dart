@@ -33,8 +33,7 @@ class NotFoundException extends AppException {
 
 /// Thrown when a business rule is violated (e.g., insufficient stock).
 class BusinessRuleException extends AppException {
-  BusinessRuleException(super.message)
-      : super(code: 'BUSINESS_RULE_ERROR');
+  BusinessRuleException(super.message) : super(code: 'BUSINESS_RULE_ERROR');
 }
 
 /// Thrown during authentication failures.

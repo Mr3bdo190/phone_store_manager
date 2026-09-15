@@ -38,10 +38,12 @@ class AuthProvider extends ChangeNotifier {
     if (_hasCheckedInitial) return false;
     _hasCheckedInitial = true;
     final result = await _checkHasUsersUseCase();
-    return result.failure != null || result.data == false; // No users = first run
+    return result.failure != null ||
+        result.data == false; // No users = first run
   }
 
-  Future<bool> login({required String username, required String password}) async {
+  Future<bool> login(
+      {required String username, required String password}) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -70,7 +72,8 @@ class AuthProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    final result = await _registerUseCase(username: username, password: password, role: role);
+    final result = await _registerUseCase(
+        username: username, password: password, role: role);
     _isLoading = false;
 
     if (result.failure != null) {

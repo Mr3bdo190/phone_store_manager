@@ -12,7 +12,8 @@ import '../../domain/usecases/create_sale_usecase.dart';
 class PosProvider extends ChangeNotifier {
   final CreateSaleUseCase _createSaleUseCase;
 
-  PosProvider() : _createSaleUseCase = CreateSaleUseCase(di.get<SalesRepository>());
+  PosProvider()
+      : _createSaleUseCase = CreateSaleUseCase(di.get<SalesRepository>());
 
   final List<CartItem> _items = [];
   int? _customerId;
@@ -33,7 +34,8 @@ class PosProvider extends ChangeNotifier {
   String? get successMessage => _successMessage;
 
   double get subtotal => _items.fold(0.0, (sum, item) => sum + item.totalPrice);
-  double get afterDiscount => (subtotal - _discount).clamp(0.0, double.infinity);
+  double get afterDiscount =>
+      (subtotal - _discount).clamp(0.0, double.infinity);
   double get taxAmount => afterDiscount * (_taxRate / 100.0);
   double get total => afterDiscount + taxAmount;
   int get itemCount => _items.length;

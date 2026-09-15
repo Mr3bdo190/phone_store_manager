@@ -39,14 +39,16 @@ class _CategoriesPageState extends State<CategoriesPage> {
   Future<void> _addCategory() async {
     final result = await _showEditDialog();
     if (result != null) {
-      await _repository.createCategory(name: result.name, description: result.description);
+      await _repository.createCategory(
+          name: result.name, description: result.description);
       await _loadCategories();
     }
   }
 
   Future<Category?> _showEditDialog({Category? category}) async {
     final nameController = TextEditingController(text: category?.name ?? '');
-    final descController = TextEditingController(text: category?.description ?? '');
+    final descController =
+        TextEditingController(text: category?.description ?? '');
 
     final result = await showDialog<Category>(
       context: context,
@@ -119,7 +121,9 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     return ListTile(
                       leading: const CircleAvatar(child: Icon(Icons.category)),
                       title: Text(cat.name),
-                      subtitle: cat.description != null ? Text(cat.description!) : null,
+                      subtitle: cat.description != null
+                          ? Text(cat.description!)
+                          : null,
                       trailing: IconButton(
                         icon: const Icon(Icons.edit, size: 20),
                         onPressed: () async {

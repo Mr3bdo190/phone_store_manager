@@ -20,7 +20,8 @@ class DashboardPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)?.dashboard ?? 'اللوحة الرئيسية'),
+        title:
+            Text(AppLocalizations.of(context)?.dashboard ?? 'اللوحة الرئيسية'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -73,38 +74,48 @@ class DashboardPage extends StatelessWidget {
                       children: [
                         DashboardCard(
                           icon: Icons.payments,
-                          title: AppLocalizations.of(context)?.todaySales ?? 'مبيعات اليوم',
-                          value: '${m.todaySales.toStringAsFixed(2)} $currencySymbol',
+                          title: AppLocalizations.of(context)?.todaySales ??
+                              'مبيعات اليوم',
+                          value:
+                              '${m.todaySales.toStringAsFixed(2)} $currencySymbol',
                           color: Theme.of(context).colorScheme.primary,
                         ),
                         DashboardCard(
                           icon: Icons.account_balance_wallet,
-                          title: AppLocalizations.of(context)?.cashBalance ?? 'رصيد النقدية',
-                          value: '${m.cashBalance.toStringAsFixed(2)} $currencySymbol',
+                          title: AppLocalizations.of(context)?.cashBalance ??
+                              'رصيد النقدية',
+                          value:
+                              '${m.cashBalance.toStringAsFixed(2)} $currencySymbol',
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                         DashboardCard(
                           icon: Icons.currency_exchange,
-                          title: AppLocalizations.of(context)?.totalSales ?? 'إجمالي المبيعات',
-                          value: '${m.totalSales.toStringAsFixed(2)} $currencySymbol',
+                          title: AppLocalizations.of(context)?.totalSales ??
+                              'إجمالي المبيعات',
+                          value:
+                              '${m.totalSales.toStringAsFixed(2)} $currencySymbol',
                           color: Theme.of(context).colorScheme.tertiary,
                         ),
                         DashboardCard(
                           icon: Icons.person,
-                          title: AppLocalizations.of(context)?.customers ?? 'العملاء',
+                          title: AppLocalizations.of(context)?.customers ??
+                              'العملاء',
                           value: '${m.customerCount}',
                           color: Colors.blue,
                         ),
                         DashboardCard(
                           icon: Icons.inventory,
-                          title: AppLocalizations.of(context)?.lowStock ?? 'مخزون منخفض',
+                          title: AppLocalizations.of(context)?.lowStock ??
+                              'مخزون منخفض',
                           value: '${m.lowStockCount}',
                           color: Colors.orange,
                         ),
                         DashboardCard(
                           icon: Icons.money_off,
-                          title: AppLocalizations.of(context)?.customerDebts ?? 'ديون العملاء',
-                          value: '${m.customerDebts.toStringAsFixed(2)} $currencySymbol',
+                          title: AppLocalizations.of(context)?.customerDebts ??
+                              'ديون العملاء',
+                          value:
+                              '${m.customerDebts.toStringAsFixed(2)} $currencySymbol',
                           color: Colors.red,
                         ),
                       ],
@@ -114,7 +125,8 @@ class DashboardPage extends StatelessWidget {
 
                     // Quick actions
                     Text(
-                      AppLocalizations.of(context)?.quickActions ?? 'إجراءات سريعة',
+                      AppLocalizations.of(context)?.quickActions ??
+                          'إجراءات سريعة',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -129,28 +141,36 @@ class DashboardPage extends StatelessWidget {
                       children: [
                         _QuickAction(
                           icon: Icons.point_of_sale,
-                          label: AppLocalizations.of(context)?.pos ?? 'نقطة البيع',
+                          label:
+                              AppLocalizations.of(context)?.pos ?? 'نقطة البيع',
                           onTap: () => Navigator.of(context).pushNamed('/pos'),
                         ),
                         _QuickAction(
                           icon: Icons.inventory_2,
-                          label: AppLocalizations.of(context)?.products ?? 'المنتجات',
-                          onTap: () => Navigator.of(context).pushNamed('/products'),
+                          label: AppLocalizations.of(context)?.products ??
+                              'المنتجات',
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/products'),
                         ),
                         _QuickAction(
                           icon: Icons.category,
-                          label: AppLocalizations.of(context)?.inventory ?? 'المخزون',
-                          onTap: () => Navigator.of(context).pushNamed('/inventory'),
+                          label: AppLocalizations.of(context)?.inventory ??
+                              'المخزون',
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/inventory'),
                         ),
                         _QuickAction(
                           icon: Icons.person,
-                          label: AppLocalizations.of(context)?.customers ?? 'العملاء',
-                          onTap: () => Navigator.of(context).pushNamed('/customers'),
+                          label: AppLocalizations.of(context)?.customers ??
+                              'العملاء',
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/customers'),
                         ),
                         _QuickAction(
                           icon: Icons.phone_android,
                           label: 'الهواتف',
-                          onTap: () => Navigator.of(context).pushNamed('/phones'),
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/phones'),
                         ),
                         _QuickAction(
                           icon: Icons.receipt_long,

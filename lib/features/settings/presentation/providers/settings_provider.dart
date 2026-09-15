@@ -16,7 +16,8 @@ class SettingsProvider extends ChangeNotifier {
 
   SettingsProvider()
       : _getSettingsUseCase = GetSettingsUseCase(di.get<SettingsRepository>()),
-        _updateSettingsUseCase = UpdateSettingsUseCase(di.get<SettingsRepository>()) {
+        _updateSettingsUseCase =
+            UpdateSettingsUseCase(di.get<SettingsRepository>()) {
     // Auto-load settings on creation
     loadSettings();
   }

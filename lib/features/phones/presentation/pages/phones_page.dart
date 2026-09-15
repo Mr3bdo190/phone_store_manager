@@ -69,10 +69,15 @@ class _PhonesPageState extends State<PhonesPage> {
                       leading: CircleAvatar(
                         backgroundColor: phone.isSold
                             ? Colors.grey.withValues(alpha: 0.2)
-                            : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                            : Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.1),
                         child: Icon(
                           Icons.phone_android,
-                          color: phone.isSold ? Colors.grey : Theme.of(context).colorScheme.primary,
+                          color: phone.isSold
+                              ? Colors.grey
+                              : Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       title: Text(phone.name),
@@ -80,14 +85,21 @@ class _PhonesPageState extends State<PhonesPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('SNR: ${phone.serialNumber}'),
-                          Text('السعر: ${phone.sellingPrice.toStringAsFixed(2)} ر.س | الكمية: ${phone.quantity}'),
+                          Text(
+                              'السعر: ${phone.sellingPrice.toStringAsFixed(2)} ر.س | الكمية: ${phone.quantity}'),
                         ],
                       ),
                       trailing: Chip(
                         label: Text(
-                          phone.status == 'sold' ? 'مباع' : phone.status == 'in_stock' ? 'متوفر' : phone.status,
+                          phone.status == 'sold'
+                              ? 'مباع'
+                              : phone.status == 'in_stock'
+                                  ? 'متوفر'
+                                  : phone.status,
                           style: TextStyle(
-                            color: phone.isSold ? Colors.grey[700] : Colors.green[700],
+                            color: phone.isSold
+                                ? Colors.grey[700]
+                                : Colors.green[700],
                             fontSize: 12,
                           ),
                         ),
@@ -138,7 +150,10 @@ class _PhoneSearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     final results = phones
-        .where((p) => p.name.contains(query) || p.sku.contains(query) || p.serialNumber.contains(query))
+        .where((p) =>
+            p.name.contains(query) ||
+            p.sku.contains(query) ||
+            p.serialNumber.contains(query))
         .toList();
     return _buildList(results);
   }

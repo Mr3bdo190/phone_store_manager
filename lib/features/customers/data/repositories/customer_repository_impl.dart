@@ -31,12 +31,19 @@ class CustomerRepositoryImpl implements CustomerRepository {
   }) async {
     try {
       if (name.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('اسم العميل مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('اسم العميل مطلوب')
+        );
       }
       if (phone.trim().isEmpty) {
-        return (data: null, failure: const ValidationFailure('رقم هاتف العميل مطلوب'));
+        return (
+          data: null,
+          failure: const ValidationFailure('رقم هاتف العميل مطلوب')
+        );
       }
-      final id = await localDataSource.createCustomer(name: name, phone: phone, address: address, notes: notes);
+      final id = await localDataSource.createCustomer(
+          name: name, phone: phone, address: address, notes: notes);
       return (data: id, failure: null);
     } catch (e) {
       return (data: null, failure: DatabaseFailure(e.toString()));
@@ -44,13 +51,20 @@ class CustomerRepositoryImpl implements CustomerRepository {
   }
 
   @override
-  Future<({bool data, Failure? failure})> updateCustomer(Customer customer) async {
+  Future<({bool data, Failure? failure})> updateCustomer(
+      Customer customer) async {
     try {
       if (customer.name.trim().isEmpty) {
-        return (data: false, failure: const ValidationFailure('اسم العميل مطلوب'));
+        return (
+          data: false,
+          failure: const ValidationFailure('اسم العميل مطلوب')
+        );
       }
       if (customer.phone.trim().isEmpty) {
-        return (data: false, failure: const ValidationFailure('رقم هاتف العميل مطلوب'));
+        return (
+          data: false,
+          failure: const ValidationFailure('رقم هاتف العميل مطلوب')
+        );
       }
       final success = await localDataSource.updateCustomer(customer);
       return (data: success, failure: null);

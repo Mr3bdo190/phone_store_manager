@@ -69,13 +69,15 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
     try {
       final product = await (database.select(database.products)
             ..where((p) => p.id.equals(productId)))
-        .getSingle();
+          .getSingle();
 
       if (product.deletedAt != null) return false;
 
       final previousQuantity = product.quantity;
 
-      final result = await (database.update(database.products)..where((p) => p.id.equals(productId))).write(
+      final result = await (database.update(database.products)
+            ..where((p) => p.id.equals(productId)))
+          .write(
         db.ProductsCompanion(quantity: Value(newQuantity)),
       );
 

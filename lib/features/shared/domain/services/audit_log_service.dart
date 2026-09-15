@@ -57,8 +57,7 @@ class AuditLogService {
         id: row.id,
         userId: row.userId,
         userName: row.userName,
-        action: AuditAction.values.firstWhere(
-            (e) => e.name == row.action,
+        action: AuditAction.values.firstWhere((e) => e.name == row.action,
             orElse: () => AuditAction.create),
         entityType: row.entityType,
         entityId: row.entityId,

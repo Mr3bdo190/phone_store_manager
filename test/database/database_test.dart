@@ -23,7 +23,8 @@ void main() {
     });
 
     group('Settings', () {
-      test('getSettingsOrDefault returns default settings when none exist', () async {
+      test('getSettingsOrDefault returns default settings when none exist',
+          () async {
         final result = await database.getSettingsOrDefault();
         expect(result.storeName, equals('Phone Store Manager'));
         expect(result.currencySymbol, equals('ر.س'));
@@ -220,9 +221,11 @@ void main() {
         ));
 
         // Soft delete
-        await (database.update(database.categories)..where((c) => c.id.equals(id))).write(
-              CategoriesCompanion(deletedAt: Value(DateTime.now())),
-            );
+        await (database.update(database.categories)
+              ..where((c) => c.id.equals(id)))
+            .write(
+          CategoriesCompanion(deletedAt: Value(DateTime.now())),
+        );
 
         final all = await database.getAllCategories();
         expect(all, isEmpty);

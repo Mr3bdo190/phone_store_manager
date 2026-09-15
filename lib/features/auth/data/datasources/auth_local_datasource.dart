@@ -31,7 +31,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   AuthLocalDataSourceImpl(this.database);
 
   @override
-  Future<AuthUser?> login({required String username, required String password}) async {
+  Future<AuthUser?> login(
+      {required String username, required String password}) async {
     final rows = await (database.select(database.users)
           ..where((u) => u.username.equals(username) & u.isActive.equals(true)))
         .get();
@@ -47,7 +48,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     return AuthUser(
       id: user.id,
       username: user.username,
-      role: UserRole.values.firstWhere((e) => e.name == user.role, orElse: () => UserRole.employee),
+      role: UserRole.values.firstWhere((e) => e.name == user.role,
+          orElse: () => UserRole.employee),
       isActive: user.isActive,
     );
   }
@@ -84,7 +86,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<AuthUser?> getFirstAdmin() async {
     final rows = await (database.select(database.users)
-          ..where((u) => u.role.equals(UserRole.admin.name) & u.isActive.equals(true))
+          ..where((u) =>
+              u.role.equals(UserRole.admin.name) & u.isActive.equals(true))
           ..limit(1))
         .get();
 
@@ -94,27 +97,32 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     return AuthUser(
       id: user.id,
       username: user.username,
-      role: UserRole.values.firstWhere((e) => e.name == user.role, orElse: () => UserRole.employee),
+      role: UserRole.values.firstWhere((e) => e.name == user.role,
+          orElse: () => UserRole.employee),
       isActive: user.isActive,
     );
   }
 
   @override
   Future<AuthUser?> getUserById(int id) async {
-    final row = await (database.select(database.users)..where((u) => u.id.equals(id))).getSingleOrNull();
+    final row = await (database.select(database.users)
+          ..where((u) => u.id.equals(id)))
+        .getSingleOrNull();
     if (row == null) return null;
 
     return AuthUser(
       id: row.id,
       username: row.username,
-      role: UserRole.values.firstWhere((e) => e.name == row.role, orElse: () => UserRole.employee),
+      role: UserRole.values.firstWhere((e) => e.name == row.role,
+          orElse: () => UserRole.employee),
       isActive: row.isActive,
     );
   }
 
   @override
   Future<int> updateLastLogin(int userId, DateTime timestamp) {
-    return (database.update(database.users)..where((u) => u.id.equals(userId))).write(
+    return (database.update(database.users)..where((u) => u.id.equals(userId)))
+        .write(
       db.UsersCompanion(lastLoginAt: Value(timestamp)),
     );
   }

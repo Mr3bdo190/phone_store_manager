@@ -67,7 +67,8 @@ class _PosPageState extends State<PosPage> {
     final currencySymbol = settings.settings?.currencySymbol ?? 'ر.س';
     final total = pos.total;
 
-    final paidController = TextEditingController(text: total.toStringAsFixed(2));
+    final paidController =
+        TextEditingController(text: total.toStringAsFixed(2));
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -85,13 +86,18 @@ class _PosPageState extends State<PosPage> {
                 border: const OutlineInputBorder(),
                 suffixText: currencySymbol,
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
             ),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('إلغاء')),
-          ElevatedButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('تأكيد')),
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('إلغاء')),
+          ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('تأكيد')),
         ],
       ),
     );
@@ -141,7 +147,9 @@ class _PosPageState extends State<PosPage> {
 
             // Search results or cart
             Expanded(
-              child: _searchController.text.isNotEmpty ? _buildSearchResults() : const _CartView(),
+              child: _searchController.text.isNotEmpty
+                  ? _buildSearchResults()
+                  : const _CartView(),
             ),
           ],
         ),
@@ -165,7 +173,8 @@ class _PosPageState extends State<PosPage> {
         return ListTile(
           leading: const CircleAvatar(child: Icon(Icons.inventory_2)),
           title: Text(product.name),
-          subtitle: Text('${product.sku} • ${product.sellingPrice.toStringAsFixed(2)} ر.س'),
+          subtitle: Text(
+              '${product.sku} • ${product.sellingPrice.toStringAsFixed(2)} ر.س'),
           trailing: product.isOutOfStock
               ? const Icon(Icons.error, color: Colors.red)
               : const Icon(Icons.add_shopping_cart, color: Colors.green),
@@ -228,10 +237,14 @@ class _CartView extends StatelessWidget {
               return Card(
                 child: ListTile(
                   title: Text(item.productName),
-                  subtitle: Text('الكمية: ${item.quantity} × ${item.unitPrice.toStringAsFixed(2)} $currencySymbol'),
+                  subtitle: Text(
+                      'الكمية: ${item.quantity} × ${item.unitPrice.toStringAsFixed(2)} $currencySymbol'),
                   trailing: Text(
                     '${item.totalPrice.toStringAsFixed(2)} $currencySymbol',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
               );
@@ -243,11 +256,14 @@ class _CartView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildSummaryRow('المجموع', pos.subtotal, currencySymbol, context),
+              _buildSummaryRow(
+                  'المجموع', pos.subtotal, currencySymbol, context),
               _buildSummaryRow('الخصم', pos.discount, currencySymbol, context),
-              _buildSummaryRow('الضريبة', pos.taxAmount, currencySymbol, context),
+              _buildSummaryRow(
+                  'الضريبة', pos.taxAmount, currencySymbol, context),
               const Divider(thickness: 2),
-              _buildSummaryRow('الإجمالي', pos.total, currencySymbol, context, isTotal: true),
+              _buildSummaryRow('الإجمالي', pos.total, currencySymbol, context,
+                  isTotal: true),
             ],
           ),
         ),
@@ -255,19 +271,27 @@ class _CartView extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryRow(String label, double amount, String currency, BuildContext context, {bool isTotal = false}) {
+  Widget _buildSummaryRow(
+      String label, double amount, String currency, BuildContext context,
+      {bool isTotal = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: isTotal
-              ? Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)
-              : Theme.of(context).textTheme.bodyMedium),
+          Text(label,
+              style: isTotal
+                  ? Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)
+                  : Theme.of(context).textTheme.bodyMedium),
           Text(
             '${amount.toStringAsFixed(2)} $currency',
             style: isTotal
-                ? Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)
+                ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary)
                 : Theme.of(context).textTheme.bodyMedium,
           ),
         ],

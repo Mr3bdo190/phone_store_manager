@@ -51,10 +51,13 @@ class _SetupPageState extends State<SetupPage> {
       }
     });
 
-    if (_usernameError != null || _passwordError != null || _confirmError != null) return;
+    if (_usernameError != null ||
+        _passwordError != null ||
+        _confirmError != null) return;
 
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    final success = await auth.register(username: username, password: password, role: UserRole.admin.name);
+    final success = await auth.register(
+        username: username, password: password, role: UserRole.admin.name);
     if (success && mounted) {
       Navigator.of(context).pushNamedAndRemoveUntil(
         '/dashboard',
@@ -81,7 +84,10 @@ class _SetupPageState extends State<SetupPage> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(Icons.admin_panel_settings, size: 40),
@@ -103,7 +109,10 @@ class _SetupPageState extends State<SetupPage> {
                   padding: const EdgeInsets.all(12),
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.error.withValues(alpha: 0.15),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .error
+                        .withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -113,7 +122,8 @@ class _SetupPageState extends State<SetupPage> {
                       Expanded(
                         child: Text(
                           auth.errorMessage!,
-                          style: TextStyle(color: Theme.of(context).colorScheme.error),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -141,8 +151,11 @@ class _SetupPageState extends State<SetupPage> {
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    icon: Icon(_obscurePassword
+                        ? Icons.visibility_off
+                        : Icons.visibility),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
                   ),
                 ),
               ),
@@ -168,10 +181,12 @@ class _SetupPageState extends State<SetupPage> {
                     : ElevatedButton(
                         onPressed: _validateAndRegister,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                           foregroundColor: Colors.white,
                         ),
-                        child: const Text('إنشاء الحساب', style: TextStyle(fontSize: 16)),
+                        child: const Text('إنشاء الحساب',
+                            style: TextStyle(fontSize: 16)),
                       ),
               ),
             ],

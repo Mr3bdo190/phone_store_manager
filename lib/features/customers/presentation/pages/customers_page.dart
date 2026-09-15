@@ -66,7 +66,8 @@ class _CustomersPageState extends State<CustomersPage> {
   Future<Customer?> _showEditDialog({Customer? customer}) async {
     final nameController = TextEditingController(text: customer?.name ?? '');
     final phoneController = TextEditingController(text: customer?.phone ?? '');
-    final addressController = TextEditingController(text: customer?.address ?? '');
+    final addressController =
+        TextEditingController(text: customer?.address ?? '');
     final notesController = TextEditingController(text: customer?.notes ?? '');
 
     final result = await showDialog<Customer>(
@@ -80,23 +81,27 @@ class _CustomersPageState extends State<CustomersPage> {
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'الاسم', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'الاسم', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: phoneController,
-                decoration: const InputDecoration(labelText: 'الهاتف', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'الهاتف', border: OutlineInputBorder()),
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: addressController,
-                decoration: const InputDecoration(labelText: 'العنوان', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'العنوان', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: notesController,
-                decoration: const InputDecoration(labelText: 'ملاحظات', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                    labelText: 'ملاحظات', border: OutlineInputBorder()),
                 maxLines: 3,
               ),
             ],
@@ -109,7 +114,8 @@ class _CustomersPageState extends State<CustomersPage> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (nameController.text.trim().isEmpty || phoneController.text.trim().isEmpty) return;
+              if (nameController.text.trim().isEmpty ||
+                  phoneController.text.trim().isEmpty) return;
               Navigator.of(context).pop(Customer(
                 id: customer?.id,
                 name: nameController.text.trim(),
@@ -174,7 +180,8 @@ class _CustomersPageState extends State<CustomersPage> {
                           final c = _filtered[index];
                           final hasDebt = c.remainingDebt > 0;
                           return ListTile(
-                            leading: const CircleAvatar(child: Icon(Icons.person)),
+                            leading:
+                                const CircleAvatar(child: Icon(Icons.person)),
                             title: Text(c.name),
                             subtitle: Text(c.phone),
                             trailing: hasDebt

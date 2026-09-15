@@ -83,18 +83,25 @@ class _SettingsPageState extends State<SettingsPage> {
                 context,
                 'إعدادات المتجر',
                 [
-                  _buildTextField(_storeNameController, 'اسم المتجر', Icons.store),
-                  _buildTextField(_storePhoneController, 'هاتف المتجر', Icons.phone, keyboardType: TextInputType.phone),
-                  _buildTextField(_storeAddressController, 'عنوان المتجر', Icons.location_on),
+                  _buildTextField(
+                      _storeNameController, 'اسم المتجر', Icons.store),
+                  _buildTextField(
+                      _storePhoneController, 'هاتف المتجر', Icons.phone,
+                      keyboardType: TextInputType.phone),
+                  _buildTextField(_storeAddressController, 'عنوان المتجر',
+                      Icons.location_on),
                 ],
               ),
               _buildSection(
                 context,
                 'إعدادات العملة',
                 [
-                  _buildTextField(_currencySymbolController, 'رمز العملة', Icons.monetization_on),
-                  _buildTextField(_currencyCodeController, 'رمز العملة (3 أحرف)', Icons.code),
-                  _buildTextField(_invoicePrefixController, 'بادئة الفاتورة', Icons.receipt_long),
+                  _buildTextField(_currencySymbolController, 'رمز العملة',
+                      Icons.monetization_on),
+                  _buildTextField(_currencyCodeController,
+                      'رمز العملة (3 أحرف)', Icons.code),
+                  _buildTextField(_invoicePrefixController, 'بادئة الفاتورة',
+                      Icons.receipt_long),
                 ],
               ),
               _buildSection(
@@ -105,7 +112,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: const Text('وضع الليل'),
                     secondary: const Icon(Icons.dark_mode),
                     value: settings.themeMode == 'dark',
-                    onChanged: (val) => _updateSetting((s) => s.copyWith(themeMode: val ? 'dark' : 'light')),
+                    onChanged: (val) => _updateSetting(
+                        (s) => s.copyWith(themeMode: val ? 'dark' : 'light')),
                   ),
                 ],
               ),
@@ -139,13 +147,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: const Text('المصادقة البيومترية'),
                     secondary: const Icon(Icons.fingerprint),
                     value: settings.enableBiometric,
-                    onChanged: (val) => _updateSetting((s) => s.copyWith(enableBiometric: val)),
+                    onChanged: (val) =>
+                        _updateSetting((s) => s.copyWith(enableBiometric: val)),
                   ),
                   SwitchListTile(
                     title: const Text('نسخ احتياطي تلقائي'),
                     secondary: const Icon(Icons.backup),
                     value: settings.enableAutoBackup,
-                    onChanged: (val) => _updateSetting((s) => s.copyWith(enableAutoBackup: val)),
+                    onChanged: (val) => _updateSetting(
+                        (s) => s.copyWith(enableAutoBackup: val)),
                   ),
                 ],
               ),
@@ -159,8 +169,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     foregroundColor: Colors.white,
                   ),
                   child: provider.isLoading
-                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Text('حفظ الإعدادات', style: TextStyle(fontSize: 16)),
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Text('حفظ الإعدادات',
+                          style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],
@@ -170,7 +184,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(
+      BuildContext context, String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -184,7 +199,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, IconData icon,
+  Widget _buildTextField(
+      TextEditingController controller, String label, IconData icon,
       {TextInputType? keyboardType}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -200,7 +216,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Future<void> _updateSetting(StoreSettings Function(StoreSettings) updater) async {
+  Future<void> _updateSetting(
+      StoreSettings Function(StoreSettings) updater) async {
     final provider = Provider.of<SettingsProvider>(context, listen: false);
     if (provider.settings == null) return;
     final updated = updater(provider.settings!);
