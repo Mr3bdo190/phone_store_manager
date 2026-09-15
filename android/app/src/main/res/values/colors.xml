@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="primary">@android:color/holo_blue_700</color>
-    <color name="onPrimary">@android:color/system_100</color>
+    <color name="primary">#2563eb</color>
+    <color name="onPrimary">#ffffff</color>
 </resources>
