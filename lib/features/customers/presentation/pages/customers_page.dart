@@ -115,7 +115,9 @@ class _CustomersPageState extends State<CustomersPage> {
           ElevatedButton(
             onPressed: () {
               if (nameController.text.trim().isEmpty ||
-                  phoneController.text.trim().isEmpty) return;
+                  phoneController.text.trim().isEmpty) {
+                return;
+              }
               Navigator.of(context).pop(Customer(
                 id: customer?.id,
                 name: nameController.text.trim(),

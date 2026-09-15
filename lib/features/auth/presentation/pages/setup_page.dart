@@ -53,7 +53,9 @@ class _SetupPageState extends State<SetupPage> {
 
     if (_usernameError != null ||
         _passwordError != null ||
-        _confirmError != null) return;
+        _confirmError != null) {
+      return;
+    }
 
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final success = await auth.register(
