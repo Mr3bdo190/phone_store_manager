@@ -2,11 +2,11 @@
 /// Repository implementation for settings.
 library;
 
-import '../../../core/errors/failures.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/entities/store_info.dart';
 import '../../domain/repositories/settings_repository.dart';
-import '../../shared/domain/entities/settings.dart';
-import '../data/datasources/settings_local_datasource.dart';
+import '../../../shared/domain/entities/settings.dart';
+import '../datasources/settings_local_datasource.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsLocalDataSource localDataSource;
@@ -17,9 +17,9 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Future<({StoreSettings? data, Failure? failure})> getSettings() async {
     try {
       final settings = await localDataSource.getSettings();
-      return (settings, null);
+      return (data: settings, failure: null);
     } catch (e) {
-      return (null, DatabaseFailure(e.toString()));
+      return (data: null, failure: DatabaseFailure(e.toString()));
     }
   }
 
@@ -27,9 +27,9 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Future<({bool data, Failure? failure})> updateSettings(StoreSettings settings) async {
     try {
       await localDataSource.saveSettings(settings);
-      return (true, null);
+      return (data: true, failure: null);
     } catch (e) {
-      return (false, DatabaseFailure(e.toString()));
+      return (data: false, failure: DatabaseFailure(e.toString()));
     }
   }
 
@@ -44,9 +44,9 @@ class SettingsRepositoryImpl implements SettingsRepository {
         currencySymbol: settings.currencySymbol,
         currencyCode: settings.currencyCode,
       );
-      return (info, null);
+      return (data: info, failure: null);
     } catch (e) {
-      return (null, DatabaseFailure(e.toString()));
+      return (data: null, failure: DatabaseFailure(e.toString()));
     }
   }
 }

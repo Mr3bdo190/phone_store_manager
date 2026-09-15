@@ -2,9 +2,9 @@
 /// Abstract repository contract for settings operations.
 library;
 
-import '../../../core/errors/failures.dart';
-import '../../shared/domain/entities/settings.dart';
-import '../domain/entities/store_info.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../shared/domain/entities/settings.dart';
+import '../entities/store_info.dart';
 
 abstract class SettingsRepository {
   Future<({StoreSettings? data, Failure? failure})> getSettings();

@@ -18,37 +18,36 @@ class AppException implements Exception {
 
 /// Thrown when a validation rule fails.
 class ValidationException extends AppException {
-  ValidationException(String message) : super(message, code: 'VALIDATION_ERROR');
+  ValidationException(super.message) : super(code: 'VALIDATION_ERROR');
 }
 
 /// Thrown when a database operation fails.
 class DatabaseException extends AppException {
-  DatabaseException(String message) : super(message, code: 'DATABASE_ERROR');
+  DatabaseException(super.message) : super(code: 'DATABASE_ERROR');
 }
 
 /// Thrown when an entity is not found.
 class NotFoundException extends AppException {
-  NotFoundException(String message) : super(message, code: 'NOT_FOUND');
+  NotFoundException(super.message) : super(code: 'NOT_FOUND');
 }
 
 /// Thrown when a business rule is violated (e.g., insufficient stock).
 class BusinessRuleException extends AppException {
-  BusinessRuleException(String message)
-      : super(message, code: 'BUSINESS_RULE_ERROR');
+  BusinessRuleException(super.message)
+      : super(code: 'BUSINESS_RULE_ERROR');
 }
 
 /// Thrown during authentication failures.
 class AuthenticationException extends AppException {
-  AuthenticationException(String message)
-      : super(message, code: 'AUTH_ERROR');
+  AuthenticationException(super.message) : super(code: 'AUTH_ERROR');
 }
 
 /// Thrown when backup/restore operations fail.
 class BackupException extends AppException {
-  BackupException(String message) : super(message, code: 'BACKUP_ERROR');
+  BackupException(super.message) : super(code: 'BACKUP_ERROR');
 }
 
 /// Thrown when network is required but unavailable.
 class NetworkException extends AppException {
-  NetworkException(String message) : super(message, code: 'NETWORK_ERROR');
+  NetworkException(super.message) : super(code: 'NETWORK_ERROR');
 }

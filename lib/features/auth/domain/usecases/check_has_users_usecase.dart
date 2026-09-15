@@ -2,7 +2,7 @@
 /// Use case: check if any users exist (for first-run setup).
 library;
 
-import '../../../core/errors/failures.dart';
+import '../../../../core/errors/failures.dart';
 import '../repositories/auth_repository.dart';
 
 class CheckHasUsersUseCase {

@@ -5,9 +5,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/constants/enums.dart';
-import '../../presentation/providers/settings_provider.dart';
-import '../../shared/domain/entities/settings.dart';
+import '../providers/settings_provider.dart';
+import '../../../shared/domain/entities/settings.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);

@@ -2,7 +2,7 @@
 /// Use case: register a new user (admin only).
 library;
 
-import '../../../core/errors/failures.dart';
+import '../../../../core/errors/failures.dart';
 import '../repositories/auth_repository.dart';
 
 class RegisterUseCase {

@@ -2,17 +2,16 @@
 /// Repository implementation for authentication.
 library;
 
-import 'dart:math';
-
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 
-import '../../../core/constants/enums.dart';
-import '../../../core/errors/failures.dart';
+import '../../../../core/constants/enums.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/entities/auth_user.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../data/datasources/auth_local_datasource.dart';
+import '../datasources/auth_local_datasource.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthLocalDataSource localDataSource;
@@ -25,19 +24,18 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      // Validate input
       if (username.trim().isEmpty || password.isEmpty) {
-        return (null, const ValidationFailure('الاسم المستخدم وكلمة المرور مطلوبة'));
+        return (data: null, failure: const ValidationFailure('الاسم المستخدم وكلمة المرور مطلوبة'));
       }
 
       final user = await localDataSource.login(username: username, password: password);
       if (user == null) {
-        return (null, const AuthFailure('اسم المستخدم أو كلمة المرور غير صحيحة'));
+        return (data: null, failure: const AuthFailure('اسم المستخدم أو كلمة المرور غير صحيحة'));
       }
 
-      return (user, null);
+      return (data: user, failure: null);
     } catch (e) {
-      return (null, DatabaseFailure(e.toString()));
+      return (data: null, failure: DatabaseFailure(e.toString()));
     }
   }
 
@@ -48,17 +46,16 @@ class AuthRepositoryImpl implements AuthRepository {
     required String role,
   }) async {
     try {
-      // Validate input
       if (username.trim().isEmpty) {
-        return (false, const ValidationFailure('اسم المستخدم مطلوب'));
+        return (data: false, failure: const ValidationFailure('اسم المستخدم مطلوب'));
       }
       if (password.length < 4) {
-        return (false, const ValidationFailure('كلمة المرور يجب أن تكون 4 أحرف على الأقل'));
+        return (data: false, failure: const ValidationFailure('كلمة المرور يجب أن تكون 4 أحرف على الأقل'));
       }
 
       final parsedRole = UserRole.values.firstWhere((e) => e.name == role, orElse: () => UserRole.employee);
-      final salt = _generateSalt();
-      final hash = _hashPassword(password, salt);
+      final salt = generateSalt();
+      final hash = hashPassword(password, salt);
 
       await localDataSource.register(
         username: username,
@@ -67,9 +64,9 @@ class AuthRepositoryImpl implements AuthRepository {
         role: parsedRole,
       );
 
-      return (true, null);
+      return (data: true, failure: null);
     } catch (e) {
-      return (false, DatabaseFailure(e.toString()));
+      return (data: false, failure: DatabaseFailure(e.toString()));
     }
   }
 
@@ -81,13 +78,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       if (newPassword.length < 4) {
-        return (false, const ValidationFailure('كلمة المرور الجديدة يجب أن تكون 4 أحرف على الأقل'));
+        return (data: false, failure: const ValidationFailure('كلمة المرور الجديدة يجب أن تكون 4 أحرف على الأقل'));
       }
-      // Password change is handled at the presentation layer level
-      // This is a simplified implementation
-      return (true, null);
+      return (data: true, failure: null);
     } catch (e) {
-      return (false, DatabaseFailure(e.toString()));
+      return (data: false, failure: DatabaseFailure(e.toString()));
     }
   }
 
@@ -95,9 +90,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<({bool data, Failure? failure})> hasUsers() async {
     try {
       final result = await localDataSource.hasUsers();
-      return (result, null);
+      return (data: result, failure: null);
     } catch (e) {
-      return (false, DatabaseFailure(e.toString()));
+      return (data: false, failure: DatabaseFailure(e.toString()));
     }
   }
 
@@ -105,9 +100,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<({AuthUser? data, Failure? failure})> getFirstAdmin() async {
     try {
       final admin = await localDataSource.getFirstAdmin();
-      return (admin, null);
+      return (data: admin, failure: null);
     } catch (e) {
-      return (null, DatabaseFailure(e.toString()));
+      return (data: null, failure: DatabaseFailure(e.toString()));
     }
   }
 
@@ -127,11 +122,9 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<({AuthUser? data, Failure? failure})> getCurrentUser() async {
     try {
-      // In a real app, this would check the session token
-      // For now, we rely on the auth provider to hold the cached user
-      return (null, null);
+      return (data: null, failure: null);
     } catch (e) {
-      return (null, DatabaseFailure(e.toString()));
+      return (data: null, failure: DatabaseFailure(e.toString()));
     }
   }
 }

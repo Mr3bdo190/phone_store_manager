@@ -5,7 +5,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/constants/enums.dart';
+import '../../../../core/constants/enums.dart';
 import '../providers/auth_provider.dart';
 
 class SetupPage extends StatefulWidget {
@@ -75,10 +75,10 @@ class _SetupPageState extends State<SetupPage> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(Icons.setup, size: 40),
+                child: const Icon(Icons.admin_panel_settings, size: 40),
               ),
               const SizedBox(height: 16),
               Text(
@@ -97,7 +97,7 @@ class _SetupPageState extends State<SetupPage> {
                   padding: const EdgeInsets.all(12),
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.error.withOpacity(0.15),
+                    color: Theme.of(context).colorScheme.error.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(

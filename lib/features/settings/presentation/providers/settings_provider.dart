@@ -4,11 +4,11 @@ library;
 
 import 'package:flutter/foundation.dart';
 
-import '../../../core/services/di.dart';
+import '../../../../core/services/di.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../domain/usecases/get_settings_usecase.dart';
 import '../../domain/usecases/update_settings_usecase.dart';
-import '../../shared/domain/entities/settings.dart';
+import '../../../shared/domain/entities/settings.dart';
 
 class SettingsProvider extends ChangeNotifier {
   final GetSettingsUseCase _getSettingsUseCase;

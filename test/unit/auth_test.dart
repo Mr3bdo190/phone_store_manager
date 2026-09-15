@@ -2,13 +2,12 @@
 /// Unit tests for authentication logic.
 library;
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
-import '../../lib/features/auth/data/repositories/auth_repository_impl.dart';
-import '../../lib/features/auth/domain/entities/auth_user.dart';
-import '../../lib/core/constants/enums.dart';
-import '../../lib/core/database/database.dart';
-import '../../lib/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:phone_store_manager/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:phone_store_manager/core/constants/enums.dart';
+import 'package:phone_store_manager/core/database/database.dart';
+import 'package:phone_store_manager/features/auth/data/datasources/auth_local_datasource.dart';
 
 void main() {
   group('AuthRepository', () {
@@ -24,7 +23,7 @@ void main() {
     });
 
     tearDown(() async {
-      await database.closeAndDelete();
+      await database.close();
     });
 
     test('register creates a user and returns true', () async {

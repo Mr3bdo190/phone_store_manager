@@ -44,7 +44,7 @@ class PhoneStoreManagerApp extends StatelessWidget {
               if (locale?.languageCode == 'ar') {
                 return const Locale('ar');
               }
-              return supported;
+              return supported.isNotEmpty ? supported.first : null;
             },
             initialRoute: '/',
             routes: AppRoutes.routes,

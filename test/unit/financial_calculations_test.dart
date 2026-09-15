@@ -5,7 +5,7 @@
 /// ensuring financial accuracy as required by the project specification.
 library;
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 /// Helper: calculate subtotal from a list of line item totals.
 double calculateSubtotal(List<double> lineTotals) {

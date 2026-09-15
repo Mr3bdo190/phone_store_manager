@@ -2,7 +2,7 @@
 /// User entity — admin or employee.
 library;
 
-import '../../../core/constants/enums.dart';
+import '../../../../core/constants/enums.dart';
 
 class User {
   final int? id;

@@ -4,8 +4,8 @@ library;
 
 import 'package:flutter/foundation.dart';
 
-import '../../../core/constants/enums.dart';
-import '../../../core/services/di.dart';
+import '../../../../core/constants/enums.dart';
+import '../../../../core/services/di.dart';
 import '../../domain/entities/auth_user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/usecases/check_has_users_usecase.dart';

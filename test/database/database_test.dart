@@ -6,9 +6,9 @@
 library;
 
 import 'package:drift/drift.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
-import '../../lib/core/database/database.dart';
+import 'package:phone_store_manager/core/database/database.dart';
 
 void main() {
   group('Database Tests', () {

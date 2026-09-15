@@ -1,51 +1,29 @@
 // lib/core/database/database.dart
 /// Database connection and [AppDatabase] definition.
 ///
-/// Uses Drift with `sqlite3_flutter_libs` for the SQLite implementation.
+/// Uses Drift with native SQLite implementation.
 library;
 
 import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:path_provider/directory_names.dart';
-import 'package:path_provider/paths.dart';
-import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
+import 'package:path/path.dart' as p;
 
 import 'tables.dart';
+import 'db_path.dart';
 
 part 'database.g.dart';
 
 /// Database for Phone Store Manager.
-///
-/// All tables are defined in `tables.dart` and imported here.
-/// The generated companion file (`database.g.dart`) is produced
-/// by running:  `dart run build_runner build`
-@DriftAccessor(
+@DriftDatabase(
   tables: [
-    Users,
-    Settings,
-    Categories,
-    Brands,
-    Products,
-    Phones,
-    Imeis,
-    Customers,
-    Suppliers,
-    Sales,
-    SaleItems,
-    SalePayments,
-    Purchases,
-    PurchaseItems,
-    PurchasePayments,
-    Returns,
-    ReturnItems,
-    InventoryMovements,
-    Expenses,
-    CashTransactions,
-    Repairs,
-    RepairPhotos,
-    AuditLogs,
+    Users, Settings, Categories, Brands, Products, Phones, Imeis,
+    Customers, Suppliers, Sales, SaleItems, SalePayments,
+    Purchases, PurchaseItems, PurchasePayments,
+    Returns, ReturnItems,
+    InventoryMovements, Expenses, CashTransactions,
+    Repairs, RepairPhotos, AuditLogs,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -54,15 +32,15 @@ class AppDatabase extends _$AppDatabase {
 
   /// Internal constructor — accepts a custom [QueryExecutor].
   /// Used by tests to pass an in-memory database.
-  AppDatabase._internal(QueryExecutor connector) : super(connector);
+  AppDatabase._internal(super.connector);
 
   /// Factory for creating an in-memory test database.
-  factory AppDatabase.test() => AppDatabase._internal(VmDatabase.memory());
+  factory AppDatabase.test() => AppDatabase._internal(NativeDatabase.memory());
 
   @override
   int get schemaVersion => 1;
 
-  // ── Settings ──────────────────────────────────────────────
+  // ── Settings ──
 
   Future<Setting> getSettings() {
     return (select(settings)..where((t) => t.id.equals(1))).getSingle();
@@ -71,7 +49,7 @@ class AppDatabase extends _$AppDatabase {
   Future<Setting> getSettingsOrDefault() async {
     final result = await (select(settings)..where((t) => t.id.equals(1))).getSingleOrNull();
     if (result == null) {
-      final companion = SettingsCompanion(
+      await into(settings).insert(SettingsCompanion(
         id: const Value(1),
         storeName: const Value('Phone Store Manager'),
         currencySymbol: const Value('ر.س'),
@@ -83,18 +61,17 @@ class AppDatabase extends _$AppDatabase {
         enableBiometric: const Value(false),
         enableAutoBackup: const Value(false),
         sessionTimeoutMinutes: const Value(15),
-      );
-      await into(settings).insert(companion);
-      return companion.value;
+      ));
+      return (await (select(settings)..where((t) => t.id.equals(1))).getSingle());
     }
     return result;
   }
 
   Future<int> insertOrUpdateSettings(SettingsCompanion s) {
-    return into(settings).insert(s, mode: Mode.insertOrReplace);
+    return into(settings).insert(s, mode: InsertMode.insertOrReplace);
   }
 
-  // ── Users ─────────────────────────────────────────────────
+  // ── Users ──
 
   Future<User> getUserById(int id) {
     return (select(users)..where((u) => u.id.equals(id))).getSingle();
@@ -108,9 +85,10 @@ class AppDatabase extends _$AppDatabase {
     return into(users).insert(user);
   }
 
-  Future<bool> updateUser(UsersCompanion user) {
-    if (user.id.unwrapOr(0) == 0) return Future.value(false);
-    return (update(users)..where((u) => u.id.equals(user.id.value))).update(user);
+  Future<bool> updateUser(UsersCompanion user) async {
+    if (!user.id.present) return false;
+    final result = await (update(users)..where((u) => u.id.equals(user.id.value))).write(user);
+    return result > 0;
   }
 
   Future<int> deleteUser(int id) {
@@ -121,7 +99,7 @@ class AppDatabase extends _$AppDatabase {
     return select(users).get();
   }
 
-  // ── Categories ────────────────────────────────────────────
+  // ── Categories ──
 
   Future<List<Category>> getAllCategories() {
     return (select(categories)
@@ -140,7 +118,7 @@ class AppDatabase extends _$AppDatabase {
     return into(categories).insert(category);
   }
 
-  // ── Brands ────────────────────────────────────────────────
+  // ── Brands ──
 
   Future<List<Brand>> getAllBrands() {
     return (select(brands)
@@ -153,7 +131,7 @@ class AppDatabase extends _$AppDatabase {
     return into(brands).insert(brand);
   }
 
-  // ── Products ──────────────────────────────────────────────
+  // ── Products ──
 
   Future<List<Product>> searchProducts(String query) {
     final pattern = '%$query%';
@@ -179,7 +157,7 @@ class AppDatabase extends _$AppDatabase {
         .getSingleOrNull();
   }
 
-  // ── Phones ────────────────────────────────────────────────
+  // ── Phones ──
 
   Future<Phone?> getPhoneById(int id) {
     return (select(phones)..where((p) => p.id.equals(id))).getSingleOrNull();
@@ -202,19 +180,19 @@ class AppDatabase extends _$AppDatabase {
     return true;
   }
 
-  // ── Inventory movements ───────────────────────────────────
+  // ── Inventory movements ──
 
   Future<int> insertMovement(InventoryMovementsCompanion movement) {
     return into(inventoryMovements).insert(movement);
   }
 
-  // ── Audit logs ────────────────────────────────────────────
+  // ── Audit logs ──
 
   Future<int> insertAuditLog(AuditLogsCompanion log) {
     return into(auditLogs).insert(log);
   }
 
-  // ── Low stock / out of stock ──────────────────────────────
+  // ── Low stock / out of stock ──
 
   Future<List<Product>> getLowStockProducts() {
     return (select(products)
@@ -226,7 +204,7 @@ class AppDatabase extends _$AppDatabase {
   Future<List<Phone>> getOutOfStockPhones() {
     return (select(phones)
           ..where((p) => p.deletedAt.isNull() & p.quantity.equals(0))
-          ..orderBy([(p) => OrderingTerm.asc(p.saleDate)]))
+          ..orderBy([(p) => OrderingTerm.desc(p.id)]))
         .get();
   }
 }
@@ -234,15 +212,8 @@ class AppDatabase extends _$AppDatabase {
 /// Opens the Drift connection with the correct SQLite library.
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'phone_store_manager.db'));
-
-    // Also copy the sqlite3 library if needed (Android only)
-    if (Platform.isAndroid) {
-      await applyWorkaroundToOpenSqlite3Part1(dbFolder);
-      await applyWorkaroundToOpenSqlite3Part2();
-    }
-
-    return VmDatabase(file);
+    final dir = await getDatabaseDirectory();
+    final file = File(p.join(dir, 'phone_store_manager.db'));
+    return NativeDatabase(file);
   });
 }

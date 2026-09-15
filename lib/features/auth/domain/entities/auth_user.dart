@@ -2,8 +2,8 @@
 /// Lightweight auth session entity.
 library;
 
-import '../../../core/constants/enums.dart';
-import '../../../features/shared/domain/entities/user.dart';
+import '../../../../core/constants/enums.dart';
+import '../../../shared/domain/entities/user.dart';
 
 class AuthUser {
   final int id;

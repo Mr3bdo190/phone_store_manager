@@ -2,15 +2,17 @@
 /// Service for writing audit log entries.
 library;
 
-import '../../../core/constants/enums.dart';
-import '../../../core/database/database.dart';
-import '../../../core/services/di.dart';
+import 'package:drift/drift.dart';
+
+import '../../../../core/constants/enums.dart';
+import '../../../../core/database/database.dart' as db;
+import '../../../../core/services/di.dart';
 import '../entities/audit_log.dart';
 
 class AuditLogService {
-  final AppDatabase _database;
+  final db.AppDatabase _database;
 
-  AuditLogService() : _database = di.get<AppDatabase>();
+  AuditLogService() : _database = di.get<db.AppDatabase>();
 
   Future<void> log({
     required int userId,
@@ -24,7 +26,7 @@ class AuditLogService {
   }) async {
     try {
       await _database.into(_database.auditLogs).insert(
-            AuditLogsCompanion.insert(
+            db.AuditLogsCompanion.insert(
               userId: userId,
               userName: userName,
               action: action.name,
@@ -43,18 +45,21 @@ class AuditLogService {
   }
 
   Future<List<AuditLog>> getRecentLogs({int limit = 50}) async {
-    final rows = await (select(_database.auditLogs)
-          ..orderBy([(a) => OrderingTerm.desc(a.timestamp)]))
+    final rows = await (_database.select(_database.auditLogs)
+          ..limit(limit)
+          ..orderBy([($tl) => OrderingTerm.desc($tl.timestamp)]))
         .get();
 
     return rows.map((row) => _fromRow(row)).toList();
   }
 
-  AuditLog _fromRow(AuditLog row) => AuditLog(
+  AuditLog _fromRow(db.AuditLog row) => AuditLog(
         id: row.id,
         userId: row.userId,
         userName: row.userName,
-        action: AuditAction.values.firstWhere((e) => e.name == row.action, orElse: () => AuditAction.create),
+        action: AuditAction.values.firstWhere(
+            (e) => e.name == row.action,
+            orElse: () => AuditAction.create),
         entityType: row.entityType,
         entityId: row.entityId,
         oldValue: row.oldValue,

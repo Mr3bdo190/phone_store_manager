@@ -2,8 +2,8 @@
 /// Abstract repository contract for authentication operations.
 library;
 
-import '../../../core/errors/failures.dart';
-import '../../domain/entities/auth_user.dart';
+import '../../../../core/errors/failures.dart';
+import '../entities/auth_user.dart';
 
 /// Result type for repository operations — simplified Either.
 typedef AuthResult<T> = ({T? data, Failure? failure})?;

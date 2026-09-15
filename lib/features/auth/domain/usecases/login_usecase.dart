@@ -2,9 +2,9 @@
 /// Use case: authenticate a user.
 library;
 
-import '../../../core/errors/failures.dart';
-import '../domain/entities/auth_user.dart';
-import '../domain/repositories/auth_repository.dart';
+import '../../../../core/errors/failures.dart';
+import '../entities/auth_user.dart';
+import '../repositories/auth_repository.dart';
 
 class LoginUseCase {
   final AuthRepository repository;

@@ -3,14 +3,13 @@
 library;
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:drift/drift.dart';
 
-import '../../../core/constants/enums.dart';
-import '../../../core/database/database.dart';
-import '../domain/entities/auth_user.dart';
+import '../../../../core/constants/enums.dart';
+import '../../../../core/database/database.dart' as db;
+import 'package:phone_store_manager/features/auth/domain/entities/auth_user.dart';
 
 abstract class AuthLocalDataSource {
   Future<AuthUser?> login({required String username, required String password});
@@ -23,11 +22,11 @@ abstract class AuthLocalDataSource {
   Future<bool> hasUsers();
   Future<AuthUser?> getFirstAdmin();
   Future<AuthUser?> getUserById(int id);
-  Future<bool> updateLastLogin(int userId, DateTime timestamp);
+  Future<int> updateLastLogin(int userId, DateTime timestamp);
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
-  final AppDatabase database;
+  final db.AppDatabase database;
 
   AuthLocalDataSourceImpl(this.database);
 
@@ -43,10 +42,10 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     final inputHash = _hashPassword(password, user.passwordSalt ?? '');
     if (inputHash != user.passwordHash) return null;
 
-    await updateLastLogin(user.id!, DateTime.now());
+    await updateLastLogin(user.id, DateTime.now());
 
     return AuthUser(
-      id: user.id!,
+      id: user.id,
       username: user.username,
       role: UserRole.values.firstWhere((e) => e.name == user.role, orElse: () => UserRole.employee),
       isActive: user.isActive,
@@ -66,7 +65,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     required String? salt,
     required UserRole role,
   }) {
-    return database.into(database.users).insert(UsersCompanion.insert(
+    return database.into(database.users).insert(db.UsersCompanion.insert(
           username: username,
           passwordHash: passwordHash,
           passwordSalt: Value(salt),
@@ -78,8 +77,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
   @override
   Future<bool> hasUsers() async {
-    final count = await database.users.count().get();
-    return count > 0;
+    final rows = await (database.select(database.users)).get();
+    return rows.isNotEmpty;
   }
 
   @override
@@ -93,7 +92,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     final user = rows.first;
 
     return AuthUser(
-      id: user.id!,
+      id: user.id,
       username: user.username,
       role: UserRole.values.firstWhere((e) => e.name == user.role, orElse: () => UserRole.employee),
       isActive: user.isActive,
@@ -106,7 +105,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     if (row == null) return null;
 
     return AuthUser(
-      id: row.id!,
+      id: row.id,
       username: row.username,
       role: UserRole.values.firstWhere((e) => e.name == row.role, orElse: () => UserRole.employee),
       isActive: row.isActive,
@@ -114,9 +113,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
 
   @override
-  Future<bool> updateLastLogin(int userId, DateTime timestamp) {
+  Future<int> updateLastLogin(int userId, DateTime timestamp) {
     return (database.update(database.users)..where((u) => u.id.equals(userId))).write(
-      UsersCompanion(lastLoginAt: Value(timestamp)),
+      db.UsersCompanion(lastLoginAt: Value(timestamp)),
     );
   }
 }

@@ -4,8 +4,8 @@ library;
 
 import 'package:drift/drift.dart';
 
-import '../../../core/database/database.dart';
-import '../../../features/shared/domain/entities/settings.dart';
+import '../../../../core/database/database.dart';
+import '../../../shared/domain/entities/settings.dart';
 
 abstract class SettingsLocalDataSource {
   Future<StoreSettings> getSettings();
@@ -47,7 +47,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     );
     return database.into(database.settings).insert(
           companion,
-          mode: Mode.insertOrReplace,
+          mode: InsertMode.insertOrReplace,
         );
   }
 

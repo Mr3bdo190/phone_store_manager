@@ -2,7 +2,7 @@
 /// Audit log entry — records critical system actions.
 library;
 
-import '../../../core/constants/enums.dart';
+import '../../../../core/constants/enums.dart';
 
 class AuditLog {
   final int? id;
@@ -15,7 +15,7 @@ class AuditLog {
   final String? newValue;
   final String? description;
   final String ipAddress;
-  final DateTime timestamp;
+  final DateTime? timestamp;
 
   AuditLog({
     this.id,

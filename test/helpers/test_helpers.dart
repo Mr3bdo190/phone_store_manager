@@ -2,7 +2,7 @@
 /// Test helpers and utilities for the Phone Store Manager test suite.
 library;
 
-import '../lib/core/database/database.dart';
+import 'package:phone_store_manager/core/database/database.dart';
 
 /// Creates an in-memory Drift database for testing.
 ///
