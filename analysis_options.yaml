@@ -5,3 +5,6 @@ analyzer:
     avoid_relative_lib_imports: ignore
     use_super_parameters: ignore
     invalid_null_aware_operator: ignore
+  exclude:
+    - build/**
+    - android/**
