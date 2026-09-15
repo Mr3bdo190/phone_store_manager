@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _validateAndLogin() {
+  Future<void> _validateAndLogin() async {
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
 
@@ -40,7 +40,13 @@ class _LoginPageState extends State<LoginPage> {
     if (_usernameError != null || _passwordError != null) return;
 
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    auth.login(username: username, password: password);
+    final success = await auth.login(username: username, password: password);
+    if (success && mounted) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/dashboard',
+        (route) => false,
+      );
+    }
   }
 
   Future<void> _checkFirstRun() async {

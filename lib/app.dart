@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/settings/presentation/providers/settings_provider.dart';
+import 'l10n/app_localizations.dart';
 import 'routes.dart';
 
 class PhoneStoreManagerApp extends StatelessWidget {
@@ -20,37 +21,68 @@ class PhoneStoreManagerApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
-      child: Consumer2<AuthProvider, SettingsProvider>(
-        builder: (context, auth, settings, _) {
-          final themeMode = settings.settings?.themeMode ?? 'light';
-          final languageCode = settings.settings?.languageCode ?? 'ar';
+      child: const _AppContent(),
+    );
+  }
+}
 
-          return MaterialApp(
-            title: 'Phone Store Manager',
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: _parseThemeMode(themeMode),
-            locale: Locale(languageCode),
-            localizationsDelegates: const [
-              // Will be extended with app-specific delegates later
-            ],
-            supportedLocales: const [
-              Locale('ar'), // Arabic (RTL)
-              Locale('en'), // English
-            ],
-            localeResolutionCallback: (locale, supported) {
-              // Force RTL for Arabic
-              if (locale?.languageCode == 'ar') {
-                return const Locale('ar');
-              }
-              return supported.isNotEmpty ? supported.first : null;
-            },
-            initialRoute: '/',
-            routes: AppRoutes.routes,
-          );
-        },
-      ),
+class _AppContent extends StatelessWidget {
+  const _AppContent({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = Provider.of<SettingsProvider>(context);
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+
+    // Show loading screen until settings are loaded
+    if (settings.isLoading) {
+      return MaterialApp(
+        title: 'Phone Store Manager',
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 24),
+                Text(
+                  'جاري التحميل...',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    final themeMode = settings.settings?.themeMode ?? 'light';
+    final languageCode = settings.settings?.languageCode ?? 'ar';
+
+    return MaterialApp(
+      title: 'Phone Store Manager',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: _parseThemeMode(themeMode),
+      locale: Locale(languageCode),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ar'), // Arabic (RTL)
+        Locale('en'), // English
+      ],
+      localeResolutionCallback: (locale, supported) {
+        final code = locale?.languageCode ?? 'ar';
+        if (supported?.contains(Locale(code)) ?? false) {
+          return Locale(code);
+        }
+        return const Locale('ar');
+      },
+      initialRoute: auth.isAuthenticated ? '/dashboard' : '/',
+      routes: AppRoutes.routes,
     );
   }
 

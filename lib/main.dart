@@ -1,45 +1,35 @@
 // lib/main.dart
 /// Application entry point.
 ///
-/// Initializes the database, registers dependencies, loads settings,
-/// then launches the Flutter app.
+/// Initializes the database, registers dependencies, then launches
+/// the Flutter app. Settings and auth providers load asynchronously
+/// inside the app widget tree.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 
 import 'app.dart';
 import 'core/database/database.dart';
 import 'core/database/db_path.dart';
 import 'core/services/di.dart';
-import 'features/settings/presentation/providers/settings_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Set the platform-specific database directory provider.
-  // Must be called before AppDatabase() in production.
+  // Uses path_provider to get the app's documents directory.
   setDirectoryProvider(() async {
     final dir = await getApplicationDocumentsDirectory();
     return dir.path;
   });
 
-  // Initialize database
+  // Initialize database and ensure default settings exist
   final database = AppDatabase();
   await database.getSettingsOrDefault();
 
-  // Register dependencies
+  // Register dependencies (database, data sources, repositories)
   await initDependencies(database);
 
-  // Load settings for theme/locale
-  final settingsProvider = SettingsProvider();
-  await settingsProvider.loadSettings();
-
-  runApp(
-    ChangeNotifierProvider.value(
-      value: settingsProvider,
-      child: const PhoneStoreManagerApp(),
-    ),
-  );
+  runApp(const PhoneStoreManagerApp());
 }

@@ -16,7 +16,10 @@ class SettingsProvider extends ChangeNotifier {
 
   SettingsProvider()
       : _getSettingsUseCase = GetSettingsUseCase(di.get<SettingsRepository>()),
-        _updateSettingsUseCase = UpdateSettingsUseCase(di.get<SettingsRepository>());
+        _updateSettingsUseCase = UpdateSettingsUseCase(di.get<SettingsRepository>()) {
+    // Auto-load settings on creation
+    loadSettings();
+  }
 
   StoreSettings? _settings;
   bool _isLoading = false;
@@ -27,6 +30,7 @@ class SettingsProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Future<void> loadSettings() async {
+    if (_isLoading) return;
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -36,8 +40,10 @@ class SettingsProvider extends ChangeNotifier {
 
     if (result.failure != null) {
       _errorMessage = result.failure!.message;
+      // Fallback to defaults
+      _settings = StoreSettings();
     } else {
-      _settings = result.data;
+      _settings = result.data ?? StoreSettings();
     }
     notifyListeners();
   }
@@ -56,7 +62,7 @@ class SettingsProvider extends ChangeNotifier {
       return false;
     }
 
-    _settings = settings;
+    _settings = settings.copyWith();
     notifyListeners();
     return true;
   }

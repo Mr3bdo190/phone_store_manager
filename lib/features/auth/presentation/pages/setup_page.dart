@@ -32,7 +32,7 @@ class _SetupPageState extends State<SetupPage> {
     super.dispose();
   }
 
-  void _validateAndRegister() {
+  Future<void> _validateAndRegister() async {
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
     final confirm = _confirmPasswordController.text;
@@ -54,7 +54,13 @@ class _SetupPageState extends State<SetupPage> {
     if (_usernameError != null || _passwordError != null || _confirmError != null) return;
 
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    auth.register(username: username, password: password, role: UserRole.admin.name);
+    final success = await auth.register(username: username, password: password, role: UserRole.admin.name);
+    if (success && mounted) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/dashboard',
+        (route) => false,
+      );
+    }
   }
 
   @override

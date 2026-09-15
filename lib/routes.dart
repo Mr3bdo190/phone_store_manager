@@ -3,11 +3,20 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/auth/presentation/pages/setup_page.dart';
+import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
+import 'features/products/presentation/pages/products_list_page.dart';
+import 'features/categories/presentation/pages/categories_page.dart';
+import 'features/brands/presentation/pages/brands_page.dart';
+import 'features/customers/presentation/pages/customers_page.dart';
+import 'features/pos/presentation/pages/pos_page.dart';
+import 'features/inventory/presentation/pages/inventory_page.dart';
+import 'features/phones/presentation/pages/phones_page.dart';
 
 class AppRoutes {
   static final Map<String, WidgetBuilder> routes = {
@@ -16,6 +25,13 @@ class AppRoutes {
     '/setup': (context) => const SetupPage(),
     '/dashboard': (context) => const DashboardPage(),
     '/settings': (context) => const SettingsPage(),
+    '/products': (context) => const ProductsListPage(),
+    '/categories': (context) => const CategoriesPage(),
+    '/brands': (context) => const BrandsPage(),
+    '/customers': (context) => const CustomersPage(),
+    '/pos': (context) => const PosPage(),
+    '/inventory': (context) => const InventoryPage(),
+    '/phones': (context) => const PhonesPage(),
   };
 }
 
@@ -35,15 +51,24 @@ class _RootRouterState extends State<_RootRouter> {
   }
 
   Future<void> _checkInitialState() async {
-    // Wait for settings to load, then navigate
-    // The auth and settings providers load in main() before this runs
-    await Future.delayed(const Duration(milliseconds: 500));
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+
+    // Check if any users exist (first-run detection)
+    final isFirstRun = await auth.checkFirstRun();
+
     if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/dashboard');
+
+    if (isFirstRun) {
+      Navigator.of(context).pushReplacementNamed('/setup');
+    } else {
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
+    );
   }
 }

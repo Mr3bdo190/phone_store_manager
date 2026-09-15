@@ -1,5 +1,5 @@
 // lib/features/settings/presentation/pages/settings_page.dart
-/// Settings screen with Arabic RTL support.
+/// Settings screen with store info, theme, language, and security.
 library;
 
 import 'package:flutter/material.dart';
@@ -47,62 +47,40 @@ class _SettingsPageState extends State<SettingsPage> {
     provider.loadSettings();
   }
 
-  void _populateFields(StoreSettings settings) {
-    _storeNameController.text = settings.storeName;
-    _storePhoneController.text = settings.storePhone ?? '';
-    _storeAddressController.text = settings.storeAddress ?? '';
-    _currencySymbolController.text = settings.currencySymbol;
-    _currencyCodeController.text = settings.currencyCode;
-    _invoicePrefixController.text = settings.invoicePrefix;
-  }
-
-  Future<void> _saveSettings() async {
-    final provider = Provider.of<SettingsProvider>(context, listen: false);
-    final settings = provider.settings!;
-
-    final updated = settings.copyWith(
-      storeName: _storeNameController.text.trim(),
-      storePhone: _storePhoneController.text.trim(),
-      storeAddress: _storeAddressController.text.trim(),
-      currencySymbol: _currencySymbolController.text.trim(),
-      currencyCode: _currencyCodeController.text.trim(),
-      invoicePrefix: _invoicePrefixController.text.trim(),
-    );
-
-    final success = await provider.saveSettings(updated);
-    if (success && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم حفظ الإعدادات بنجاح')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<SettingsProvider>(context);
+    final settings = provider.settings;
 
-    if (provider.isLoading && provider.settings == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+    if (provider.isLoading && settings == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    if (provider.settings != null && _storeNameController.text.isEmpty) {
-      _populateFields(provider.settings!);
+    if (settings == null) {
+      return const Scaffold(body: Center(child: Text('فشل تحميل الإعدادات')));
     }
 
-    final settings = provider.settings!;
+    // Populate controllers once
+    if (_storeNameController.text.isEmpty) {
+      _storeNameController.text = settings.storeName;
+      _storePhoneController.text = settings.storePhone ?? '';
+      _storeAddressController.text = settings.storeAddress ?? '';
+      _currencySymbolController.text = settings.currencySymbol;
+      _currencyCodeController.text = settings.currencyCode;
+      _invoicePrefixController.text = settings.invoicePrefix;
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('الإعدادات')),
       body: RefreshIndicator(
-        onRefresh: () async => _loadSettings(),
+        onRefresh: () async => provider.loadSettings(),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildSection(
+                context,
                 'إعدادات المتجر',
                 [
                   _buildTextField(_storeNameController, 'اسم المتجر', Icons.store),
@@ -111,6 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               _buildSection(
+                context,
                 'إعدادات العملة',
                 [
                   _buildTextField(_currencySymbolController, 'رمز العملة', Icons.monetization_on),
@@ -119,17 +98,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
               _buildSection(
+                context,
                 'المظهر',
                 [
                   SwitchListTile(
                     title: const Text('وضع الليل'),
                     secondary: const Icon(Icons.dark_mode),
                     value: settings.themeMode == 'dark',
-                    onChanged: (val) => _updateTheme(val ? 'dark' : 'light'),
+                    onChanged: (val) => _updateSetting((s) => s.copyWith(themeMode: val ? 'dark' : 'light')),
                   ),
                 ],
               ),
               _buildSection(
+                context,
                 'اللغة',
                 [
                   ListTile(
@@ -142,31 +123,29 @@ class _SettingsPageState extends State<SettingsPage> {
                         DropdownMenuItem(value: 'en', child: Text('English')),
                       ],
                       onChanged: (val) {
-                        if (val != null) _updateLanguage(val);
+                        if (val != null) {
+                          _updateSetting((s) => s.copyWith(languageCode: val));
+                        }
                       },
                     ),
                   ),
                 ],
               ),
               _buildSection(
+                context,
                 'الخصوصية والأمان',
                 [
                   SwitchListTile(
                     title: const Text('المصادقة البيومترية'),
                     secondary: const Icon(Icons.fingerprint),
                     value: settings.enableBiometric,
-                    onChanged: (val) => _updateBiometric(val),
+                    onChanged: (val) => _updateSetting((s) => s.copyWith(enableBiometric: val)),
                   ),
-                ],
-              ),
-              _buildSection(
-                'النسخ الاحتياطي',
-                [
                   SwitchListTile(
-                    title: const Text('النسخ الاحتياطي التلقائي'),
+                    title: const Text('نسخ احتياطي تلقائي'),
                     secondary: const Icon(Icons.backup),
                     value: settings.enableAutoBackup,
-                    onChanged: (val) => _updateAutoBackup(val),
+                    onChanged: (val) => _updateSetting((s) => s.copyWith(enableAutoBackup: val)),
                   ),
                 ],
               ),
@@ -179,8 +158,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,
                   ),
-                  child: provider.isLoading ? const SizedBox(
-                    width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Text('حفظ الإعدادات'),
+                  child: provider.isLoading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Text('حفظ الإعدادات', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],
@@ -190,7 +170,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildSection(String title, List<Widget> children) {
+  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -220,28 +200,36 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _updateTheme(String mode) async {
+  Future<void> _updateSetting(StoreSettings Function(StoreSettings) updater) async {
     final provider = Provider.of<SettingsProvider>(context, listen: false);
-    final updated = provider.settings!.copyWith(themeMode: mode);
-    await provider.saveSettings(updated);
+    if (provider.settings == null) return;
+    final updated = updater(provider.settings!);
+    final success = await provider.saveSettings(updated);
+    if (success && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تم حفظ الإعدادات')),
+      );
+    }
   }
 
-  void _updateLanguage(String code) async {
+  Future<void> _saveSettings() async {
     final provider = Provider.of<SettingsProvider>(context, listen: false);
-    final updated = provider.settings!.copyWith(languageCode: code);
-    await provider.saveSettings(updated);
-    setState(() {}); // Trigger rebuild for RTL changes
-  }
+    if (provider.settings == null) return;
 
-  void _updateBiometric(bool val) async {
-    final provider = Provider.of<SettingsProvider>(context, listen: false);
-    final updated = provider.settings!.copyWith(enableBiometric: val);
-    await provider.saveSettings(updated);
-  }
+    final updated = provider.settings!.copyWith(
+      storeName: _storeNameController.text.trim(),
+      storePhone: _storePhoneController.text.trim(),
+      storeAddress: _storeAddressController.text.trim(),
+      currencySymbol: _currencySymbolController.text.trim(),
+      currencyCode: _currencyCodeController.text.trim(),
+      invoicePrefix: _invoicePrefixController.text.trim(),
+    );
 
-  void _updateAutoBackup(bool val) async {
-    final provider = Provider.of<SettingsProvider>(context, listen: false);
-    final updated = provider.settings!.copyWith(enableAutoBackup: val);
-    await provider.saveSettings(updated);
+    final success = await provider.saveSettings(updated);
+    if (success && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تم حفظ الإعدادات بنجاح')),
+      );
+    }
   }
 }
